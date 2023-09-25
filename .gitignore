@@ -1,2 +1,10 @@
 # dependencies
-/node_modules
+.DS_Store
+.cache
+node_modules
+dist
+es
+lib
+*.log
+.vim
+.vscode/
