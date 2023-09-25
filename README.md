@@ -176,8 +176,3 @@ const App = () => {
 
 export default App;
 ```
-
-
-## License
-
-MIT © [Finmont](https://github.com/Finmont-India)
