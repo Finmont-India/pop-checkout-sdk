@@ -1,6 +1,6 @@
 // App.tsx
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { configureSdk, useSdk } from 'pop-checkout-sdk';
 
 import 'pop-checkout-sdk/dist/index.css';
@@ -131,7 +131,7 @@ const App = () => {
   };
 
 
-  const callGet3DSResponse = async () => {
+  const callGet3DSResponse = useCallback(async () => {
     try {
       const result = await get3DSResponse(recieptReference, reference);
       setPaymentResult(result);
@@ -139,16 +139,15 @@ const App = () => {
     } catch (error) {
       console.error("Error:", error);
     }
-  };
-
-
+  }, [recieptReference, reference, get3DSResponse]);
+  
   useEffect(() => {
     // Configure the SDK with your API key and environment (e.g., "dev")
-    if (recieptReference && ref) {
+    if (recieptReference && reference) {
       callGet3DSResponse();
     }
-  }, [key]);
-
+  }, [recieptReference, reference, callGet3DSResponse]);
+  
 
   const getPaymentStatus = async () => {
     if (recieptReference) {
