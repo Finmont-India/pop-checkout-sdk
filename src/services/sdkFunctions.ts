@@ -3,38 +3,6 @@ import { getConfig } from "../config";
 import { getBaseUrl } from "./FetchBaseUrl";
 
 let ref='';
-export function createHiddenForm(data: any ) {
-  console.log(data);
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = data.response3Ds.url;
-
-  const paReqInput = document.createElement('input');
-  paReqInput.type = 'hidden';
-  paReqInput.name = 'PaReq';
-  paReqInput.value = data.response3Ds.reference;
-  form.appendChild(paReqInput);
-
-  const mdInput = document.createElement('input');
-  mdInput.type = 'hidden';
-  mdInput.name = 'MD';
-  mdInput.value = data.response3Ds.token;
-  form.appendChild(mdInput);
-
-  const termUrlInput = document.createElement('input');
-  termUrlInput.type = 'hidden';
-  termUrlInput.name = 'TermUrl';
-  termUrlInput.value = "";
-  form.appendChild(termUrlInput);
-
-  form.addEventListener('submit', () => {
-    console.log('Form submitted to initiate 3D Secure flow.');
-  });
-
-  return form;
-}
-
-
 
 export const initatePayment = async (ref: string, order: any) => {
   console.log("initiate")
@@ -126,20 +94,9 @@ export async function authorizeCard(order: { amount: any; returnUrl: any }): Pro
     
     console.log(paymentResult);
     if (
-      paymentResult.data.response3Ds &&
-      paymentResult.data.response3Ds.url
-    ) {
-      console.log("3ds authentication initated")
-      const { receiptReference } = response.data;
-      const checkoutCallbackURL = `${BASE_URL}/three-ds-callback?receiptReference=${receiptReference}&reference=${ref}`
-      console.log(checkoutCallbackURL);
-      window.location.href=paymentResult.data.response3Ds.url
-
-      // const form = createHiddenForm(paymentResult.data ); // Create the hidden form using the imported function
-      // document.body.appendChild(form);
-      // form.submit();
-    
-      console.log('End of 3ds post')
+      !paymentResult.data.response3Ds
+     ) {
+      return paymentResult.data
   }
     // @ts-ignore
   } catch (error: AxiosError<any>) {

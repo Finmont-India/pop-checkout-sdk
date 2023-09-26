@@ -5,6 +5,10 @@ import { getCardType } from '../services/CardType';
 
 interface CardFormWidgetProps {
   customStyles?: {
+    textStyles?: {
+      head?: React.CSSProperties;
+      body?: React.CSSProperties;
+    };
     cardNumberInput?: React.CSSProperties;
     expirationDateInput?: React.CSSProperties;
     cvvInput?: React.CSSProperties;
@@ -23,34 +27,7 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
   const [isExpirationDateValid, setIsExpirationDateValid] = useState(true);
   const [isCVVValid, setIsCVVValid] = useState(true);
 
-  const defaultStyles = {
-    inputContainer: {
-      padding:'15px',
-    },
-    cardNumberInput: {
-      border: '1px solid #ccc',
-      padding: '10px',
-      width: '100%',
-    },
-    expirationDateInput: {
-      border: '1px solid #ccc',
-      padding: '10px',
-      width: '100%',
-    },
-    cvvInput: {
-      border: '1px solid #ccc',
-      padding: '10px',
-      width: '100%',
-    },
-    invalid: {
-      borderColor: 'red',
-    },
-    success: {
-      borderColor: 'green',
-    },
-  };
-
-  const styles = { ...defaultStyles, ...customStyles };
+  const styles = { ...customStyles };
 
   const validateCardNumber = (value: string) => /^[0-9]{0,16}$/.test(value);
 
@@ -62,10 +39,10 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
         expiryMonth: expirationDate.split('/')[0],
         expiryYear: expirationDate.split('/')[1],
         cvc: cvv,
-        cardType:getCardType(cardNumber),
+        cardType: getCardType(cardNumber),
       };
       console.log("creating card token");
-      // Call the payment service to create a card token 
+      // Call the payment service to create a card token
       createCardToken(cardData)
         .then((token) => {
           // Handle the token (e.g., send it to your server for further processing)
@@ -79,142 +56,140 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
         });
     }
   }, [isCardNumberValid, isExpirationDateValid, isCVVValid, cardNumber, expirationDate, cvv]);
-  
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
-  
+
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
-  
+
     // Format with spaces: add a space every four digits
     let formattedValue = numericValue.replace(/(\d{4})(?=\d)/g, '$1 ');
-  
+
     // Limit the input to a maximum of 19 characters (16 digits + 3 spaces)
     if (formattedValue.length > 19) {
       formattedValue = formattedValue.slice(0, 19);
     }
-  
-    const isValid = formattedValue=== '' || validateCardNumber(numericValue) && numericValue.length === 16;
-  
+
+    const isValid = formattedValue === '' || (validateCardNumber(numericValue) && numericValue.length === 16);
+
     setCardNumber(formattedValue);
     setIsCardNumberValid(isValid);
-  
-    // Show an error message when the input is not valid, not 16 digits, or more than 19 characters
-    if (!isValid || numericValue.length !== 16 || formattedValue.length > 19) {
-      setIsCardNumberValid(false);
-    } else {
-      setIsCardNumberValid(true); // Clear the error message
-    }
   };
+
   const currentConfig = getConfig() as { env: string, apiKey: string };
-   console.log(currentConfig.apiKey);
+  console.log(currentConfig.apiKey);
+
   const handleExpirationDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-  
+
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
-  
+
     // Limit the input to a maximum of 5 characters (e.g., 12/23)
     if (numericValue.length > 7) {
       return;
     }
-  
+
     // Format the input as "MM/YY"
     let formattedValue = numericValue;
     if (numericValue.length > 2) {
       formattedValue = `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
     }
-  
+
     // Validate the formatted value with a regular expression
-    const isValid = formattedValue=== '' || /^([1-9]|0[1-9]|1[0-2])\/\d{4}$/.test(formattedValue);
-  
+    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/\d{4}$/.test(formattedValue);
+
     setExpirationDate(formattedValue);
     setIsExpirationDateValid(isValid);
-  
-    // Show an error message when the input is not valid
-    if (!isValid) {
-      setIsExpirationDateValid(false);
-    } else {
-      setIsExpirationDateValid(true); // Clear the error message
-    }
   };
-  
 
   const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
-  
+
     // Remove all non-numeric characters
     const numericValue = newValue.replace(/[^\d]/g, '');
-  
+
     // Limit the input to a maximum of 3 digits
     if (numericValue.length > 3) {
       return;
     }
-  
-     // Check if the numericValue is empty (no digits) and avoid showing an error message
+
+    // Check if the numericValue is empty (no digits) and avoid showing an error message
     const isValid = numericValue === '' || /^\d{3}$/.test(numericValue);
 
-  
     setCVV(numericValue);
     setIsCVVValid(isValid);
-  
-    // Show an error message when the input is not valid
-    if (!isValid) {
-      setIsCVVValid(false);
-    } else {
-      setIsCVVValid(true); // Clear the error message
-    }
   };
-  
 
   return (
     <div id="card-form-widget">
-      <h2>Enter Card Details</h2>
-      <form style={{...styles.inputContainer}}>
-        <label htmlFor="cardNumber">Card Number:</label>
-        <input
-          type="text"
-          id="cardNumber"
-          placeholder="Card Number"
-          value={cardNumber}
-          onChange={handleCardNumberChange}
-          style={{
-            ...styles.cardNumberInput,
-            ...(isCardNumberValid ? {} : styles.invalid),
-          }}
-        />
-        {!isCardNumberValid && <div className="error">Invalid Card Number</div>}<br />
-
-        <label htmlFor="expirationDate">Expiration Date:</label>
-        <input
-          type="text"
-          id="expirationDate"
-          placeholder="MM/YYYY"
-          value={expirationDate}
-          onChange={handleExpirationDateChange}
-          style={{
-            ...styles.expirationDateInput,
-            ...(isExpirationDateValid ? {} : styles.invalid),
-          }}
-        />
-        {!isExpirationDateValid && <div className="error">Invalid Expiration Date</div>}<br />
-
-        <label htmlFor="cvv">CVV:</label>
-        <input
-          type="text"
-          id="cvv"
-          placeholder="CVV"
-          value={cvv}
-          onChange={handleCVVChange}
-          style={{
-            ...styles.cvvInput,
-            ...(isCVVValid ? {} : styles.invalid),
-          }}
-        />
-        {!isCVVValid && <div className="error">Invalid CVV</div>}<br />
-
-        <button type="submit">Submit Payment</button>
+      <h2 style={styles.textStyles?.head}>Enter Card Details</h2>
+      <form>
+        <div style={{ marginBottom: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <label style={styles.textStyles?.body} htmlFor="cardNumber">Card Number </label>
+            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/visa.png" alt="visa" />
+            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/amex.png" alt="amex"/>
+            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/mastercard.png" alt="mastercard"/>
+          </div>
+          <div >
+            <input
+              type="text"
+              id="cardNumber"
+              placeholder="Card Number"
+              value={cardNumber}
+              onChange={handleCardNumberChange}
+              style={{
+                ...styles.cardNumberInput,
+                ...(isCardNumberValid ? {} : styles.invalid),
+                width: '70%',
+                marginLeft: '5px',
+              }}
+            />
+          </div>
+        </div>
+        {!isCardNumberValid && <div className="error">Invalid Card Number</div>}
+        <div style={{ marginBottom: '10px' }}>
+          <label style={styles.textStyles?.body} htmlFor="expirationDate">Expiration Date </label>
+          <div>
+            <input
+              type="text"
+              id="expirationDate"
+              placeholder="MM/YYYY"
+              value={expirationDate}
+              onChange={handleExpirationDateChange}
+              style={{
+                ...styles.expirationDateInput,
+                ...(isExpirationDateValid ? {} : styles.invalid),
+                width: '70%',
+                marginLeft: '5px',
+                marginTop: '7px',
+              }}
+            />
+          </div>
+        </div>
+        {!isExpirationDateValid && <div className="error">Invalid Expiration Date</div>}
+        <div>
+          <label style={styles.textStyles?.body} htmlFor="cvv">CVV </label>
+          <div>
+            <input
+              type="text"
+              id="cvv"
+              placeholder="CVV"
+              value={cvv}
+              onChange={handleCVVChange}
+              style={{
+                ...styles.cvvInput,
+                ...(isCVVValid ? {} : styles.invalid),
+                width: '70%',
+                marginLeft: '5px',
+                marginTop:'7px',
+              }}
+            />
+          </div>
+        </div>
+        {!isCVVValid && <div className="error">Invalid CVV</div>}
       </form>
     </div>
   );
