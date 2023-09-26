@@ -1,6 +1,7 @@
 {
-  "name": "@finmont/pop-checkout-sdk",
+  "name": "finmont-checkout-sdk",
   "version": "1.0.0",
+  "private": false,
   "description": "library that supports the payment elements and modules",
   "author": "Finmont",
   "license": "MIT",
