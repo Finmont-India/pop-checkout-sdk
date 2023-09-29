@@ -30,7 +30,7 @@ export const createCardToken = async (cardData: any) => {
 
   try {
     const response: AxiosResponse = await axios.post(
-      `${BASE_URL}/tokeniser?schema=card`,
+      `${BASE_URL}/tokeniser?schema=card&platform=sdk`,
       cardData,
       // @ts-ignore
       {headers}
