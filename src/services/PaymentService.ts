@@ -36,7 +36,7 @@ export const createCardToken = async (cardData: any) => {
       {headers}
     );
 
-    return { data: response.data };
+    return { success: true, data: response.data.key };
     // @ts-ignore
 } catch (error: any) {
     // Handle errors
@@ -53,7 +53,7 @@ export const createCardToken = async (cardData: any) => {
     }
 
     // Return an error object or throw an error as needed
-    throw error;
+    return { success: false, error: error.message };
   } finally {
     isCreateCardTokenInProgress = false; // Reset the flag when the request is complete
   }

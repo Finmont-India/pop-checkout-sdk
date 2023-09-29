@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { createCardToken } from '../services/PaymentService';
-import { getConfig } from '../config';
 import { getCardType } from '../services/CardType';
 
 interface CardFormWidgetProps {
@@ -26,6 +25,8 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
   const [isCardNumberValid, setIsCardNumberValid] = useState(true);
   const [isExpirationDateValid, setIsExpirationDateValid] = useState(true);
   const [isCVVValid, setIsCVVValid] = useState(true);
+  const [tokenizationError, setTokenizationError] = useState<string | null>(null);
+
 
   const styles = { ...customStyles };
 
@@ -41,70 +42,66 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
         cvc: cvv,
         cardType: getCardType(cardNumber),
       };
-      console.log("creating card token");
       // Call the payment service to create a card token
-      createCardToken(cardData)
-        .then((token) => {
-          // Handle the token (e.g., send it to your server for further processing)
-          console.log('Card Token:', token);
-          onTokenReceived(token?.data.key);
-        })
-        .catch((error) => {
-          // Handle errors
-          console.error('Tokenization Error:', error);
-          onTokenReceived(Error.name);
-        });
+      const response = createCardToken(cardData)
+      response.then((token) => {
+        // Handle the token (e.g., send it to your server for further processing)
+        if (token?.success === true) {
+          onTokenReceived(token.data);
+          setTokenizationError(null);
+          return;
+        }
+        return setTokenizationError("Card verification failed, check the card details.");
+
+      })
     }
   }, [isCardNumberValid, isExpirationDateValid, isCVVValid, cardNumber, expirationDate, cvv]);
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
-  
+
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
-  
+
     // Limit the input to exactly 16 digits
     if (numericValue.length > 16) {
       return; // Do nothing if more than 16 digits
     }
-  
+
     // Format with spaces: add a space every four digits
     let formattedValue = numericValue.replace(/(\d{4})(?=\d)/g, '$1 ');
-  
-    const isValid = formattedValue === '' || (validateCardNumber(numericValue) && numericValue.length === 16);
-  
+
+    const isValid = formattedValue === '' || (validateCardNumber(numericValue) && numericValue.length <= 16);
+
     setCardNumber(formattedValue);
     setIsCardNumberValid(isValid);
   };
-  
-
-  const currentConfig = getConfig() as { env: string, apiKey: string };
-  console.log(currentConfig.apiKey);
 
   const handleExpirationDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-
-    // Remove all non-numeric characters and spaces
+    let newValue = e.target.value;
+  
+    // Remove all non-numeric characters
     const numericValue = newValue.replace(/[^\d]/g, '');
-
-    // Limit the input to a maximum of 5 characters (e.g., 12/23)
+  
+    // Limit the input to a maximum of 7 characters (e.g., 05/2023)
     if (numericValue.length > 7) {
-      return;
+      return; // Do nothing if more than 7 characters
     }
-
-    // Format the input as "MM/YY"
+  
+    // Format the input as "MM/YYYY"
     let formattedValue = numericValue;
+  
     if (numericValue.length > 2) {
-      formattedValue = `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
+      formattedValue = `${numericValue.slice(0, 2)}/${numericValue.slice(2, 6)}`;
     }
-
-    // Validate the formatted value with a regular expression (accepts MM/YYYY or MM/YY)
-    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/(20\d{2}|[0-9]{2})$/.test(formattedValue);
-
+  
+    // Validate the formatted value with a regular expression (accepts MM/YYYY only)
+    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/(20\d{2})$/.test(formattedValue);
+  
     setExpirationDate(formattedValue);
     setIsExpirationDateValid(isValid);
   };
-
+  
   const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
 
@@ -191,6 +188,12 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
           </div>
         </div>
         {!isCVVValid && <div className="error">Invalid CVV</div>}
+
+        {tokenizationError && (
+          <div style={{ ...styles.feedback, ...styles.invalid, marginTop: '10px' }}>
+            {tokenizationError}
+          </div>
+        )}
       </form>
     </div>
   );
