@@ -28,7 +28,7 @@ upgrade React to use this library.
 To get started with finmont-checkout-sdk, import it and configure it:
 
 ```javascript
-import configureSdk from 'pop-checkout-sdk';
+import configureSdk from 'finmont-checkout-sdk';
 
 configureSdk(apiKey, envValue);;
 
