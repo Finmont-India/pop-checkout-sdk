@@ -59,23 +59,24 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
-
+  
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
-
+  
+    // Limit the input to exactly 16 digits
+    if (numericValue.length > 16) {
+      return; // Do nothing if more than 16 digits
+    }
+  
     // Format with spaces: add a space every four digits
     let formattedValue = numericValue.replace(/(\d{4})(?=\d)/g, '$1 ');
-
-    // Limit the input to a maximum of 19 characters (16 digits + 3 spaces)
-    if (formattedValue.length > 19) {
-      formattedValue = formattedValue.slice(0, 19);
-    }
-
+  
     const isValid = formattedValue === '' || (validateCardNumber(numericValue) && numericValue.length === 16);
-
+  
     setCardNumber(formattedValue);
     setIsCardNumberValid(isValid);
   };
+  
 
   const currentConfig = getConfig() as { env: string, apiKey: string };
   console.log(currentConfig.apiKey);
@@ -97,8 +98,8 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
       formattedValue = `${numericValue.slice(0, 2)}/${numericValue.slice(2)}`;
     }
 
-    // Validate the formatted value with a regular expression
-    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/\d{4}$/.test(formattedValue);
+    // Validate the formatted value with a regular expression (accepts MM/YYYY or MM/YY)
+    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/(20\d{2}|[0-9]{2})$/.test(formattedValue);
 
     setExpirationDate(formattedValue);
     setIsExpirationDateValid(isValid);
@@ -130,8 +131,8 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <label style={styles.textStyles?.body} htmlFor="cardNumber">Card Number </label>
             <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/visa.png" alt="visa" />
-            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/amex.png" alt="amex"/>
-            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/mastercard.png" alt="mastercard"/>
+            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/amex.png" alt="amex" />
+            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/mastercard.png" alt="mastercard" />
           </div>
           <div >
             <input
@@ -184,7 +185,7 @@ export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, on
                 ...(isCVVValid ? {} : styles.invalid),
                 width: '70%',
                 marginLeft: '5px',
-                marginTop:'7px',
+                marginTop: '7px',
               }}
             />
           </div>

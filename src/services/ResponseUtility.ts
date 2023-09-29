@@ -2,25 +2,25 @@ import axios, { AxiosResponse, RawAxiosRequestHeaders } from "axios";
 import { getConfig } from "../config"
 import { getBaseUrl } from "./FetchBaseUrl";
 
-export const getCachedsRequest = async (reference: string) => {
-  const { env, apiKey } = getConfig();
-  const urlObj = getBaseUrl(env);
-  const BASE_URL = urlObj.paymentUrl;
+export const getCachedRequest = async(reference: string) => {
+    const { env, apiKey } = getConfig();
+    const urlObj = getBaseUrl(env);
+    const BASE_URL = urlObj.paymentUrl;
 
-  const customHeaders: RawAxiosRequestHeaders = {
-    "Authorization": `Bearer ${encodeURIComponent(apiKey)}`,
-  };
+    const customHeaders: RawAxiosRequestHeaders = {
+      "Authorization": `Bearer ${encodeURIComponent(apiKey)}`,
+    };
 
-  const headers: RawAxiosRequestHeaders = {
-    ...customHeaders,
-  };
+    const headers: RawAxiosRequestHeaders = {
+      ...customHeaders,
+    };
 
-  try {
-    const response: AxiosResponse = await axios.get(
-      `${BASE_URL}/payment-session/${reference}?platform=sdk`,
-      // @ts-ignore
-      { headers }
-    );
+    try {
+      const response: AxiosResponse = await axios.get(
+        `${BASE_URL}/payment-session/${reference}&platform=sdk`,
+        // @ts-ignore
+        {headers}
+      );
 
     return { data: response.data };
     // @ts-ignore

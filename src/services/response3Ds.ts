@@ -1,11 +1,11 @@
 // Assuming these functions are imported correctly
 import axios, { AxiosResponse, RawAxiosRequestHeaders } from "axios";
 import { getBaseUrl } from "./FetchBaseUrl";
-import { get3DSObject, getCachedsRequest } from "./ResponseUtility";
+import { get3DSObject, getCachedRequest } from "./ResponseUtility";
 import { initatePayment } from "./sdkFunctions";
 
 export const get3DSResponse = async (recieptReference: string, reference: string) => {
-  const response = await getCachedsRequest(reference);
+  const response = await getCachedRequest(reference);
   const obj3Ds = await get3DSObject(recieptReference);
   const payload = {
     order: response.data.paymentSessionData.order,
@@ -17,57 +17,11 @@ export const get3DSResponse = async (recieptReference: string, reference: string
   };
   const result = await initatePayment(reference, payload);
   return result;
-
-  /* try {
-       let response = getCachedsRequest(reference);
-       response.then((data: any)=>{
-       console.log(data)
-   }
-
-       // Handle the case when no valid data is available.
-       throw new Error("No valid data found.");
-   } catch (error) {
-       // Handle any errors that might occur during the execution of the code.
-       console.error("Error:", error);
-       throw error; // Re-throw the error to propagate it up the call stack.
-   }
-   if (response!== undefined) {
-       let Obj3Ds;
-
-       try {
-           Obj3Ds = get3DSObject(recieptReference);
-       } catch (obj3DsError) {
-           console.error("Error fetching Obj3Ds:", obj3DsError);
-           throw obj3DsError; // Re-throw the error to propagate it up the call stack.
-       }
-       console.log(Obj3Ds);
-       /*if (Obj3Ds) {
-           let PaymentResponse;
-
-           try {
-               PaymentResponse = authoriseCard({
-                   order: response.data.order,
-                   recieptReference,
-                   Obj3ds: Obj3Ds.data
-               });
-           } catch (paymentError) {
-               console.error("Error processing PaymentResponse:", paymentError);
-               throw paymentError; // Re-throw the error to propagate it up the call stack.
-           }
-
-           if (PaymentResponse && PaymentResponse.data) {
-               return PaymentResponse.data;
-           }
-       } 
-}}) */
 };
 
 export const getPaymentResponse = async (recieptReference: string, apiKey: string, env: string) => {
-  console.log(env)
   const urlObj = getBaseUrl(env);
-  console.log(urlObj)
   const BASE_URL = urlObj.paymentUrl;
-  console.log(BASE_URL)
 
   const customHeaders: RawAxiosRequestHeaders = {
     "Authorization": `Bearer ${encodeURIComponent(apiKey)}`,
