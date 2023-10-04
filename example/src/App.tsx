@@ -125,8 +125,9 @@ const App = () => {
   const { Widget, get3DSResponse, getPaymentResponse } = useSdk();
 
   // Callback function to handle the received token
-  const handleTokenReceived = (receivedToken: string) => {
+  const handleTokenReceived = (receivedToken: string, cardType: string) => {
     setToken(receivedToken);
+    console.log(cardType);
     // You can perform further actions with the token here
   };
 

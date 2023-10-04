@@ -1,4 +1,4 @@
-export const getCardType=(cardNumber: string)=> {
+export const getCardType=(cardNumber: any)=> {
     // Define regular expressions for different card types
     const cardTypes = [
       {

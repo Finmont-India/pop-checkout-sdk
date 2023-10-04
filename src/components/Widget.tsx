@@ -20,7 +20,7 @@ export interface WidgetProps {
     };
   };
   type: string;
-  onTokenReceived: (token: string) => void;
+  onTokenReceived: (token: string, cardType: string) => void;
 }
 
 const defaultStyles = {

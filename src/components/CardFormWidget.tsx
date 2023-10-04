@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { createCardToken } from '../services/PaymentService';
-import { getCardType } from '../services/CardType';
+import React, { useState } from 'react';
+import Cards, { ReactCreditCardProps } from 'react-credit-cards';
+import 'react-credit-cards/es/styles-compiled.css';
+import CardForm from './CardForm';
 
 interface CardFormWidgetProps {
   customStyles?: {
@@ -15,188 +16,76 @@ interface CardFormWidgetProps {
     invalid?: React.CSSProperties;
     success?: React.CSSProperties;
   };
-  onTokenReceived: (token: string) => void;
+  onTokenReceived: (token: string, cardType: string) => void;
 }
 
-export const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenReceived }) => {
-  const [cardNumber, setCardNumber] = useState('');
-  const [expirationDate, setExpirationDate] = useState('');
-  const [cvv, setCVV] = useState('');
-  const [isCardNumberValid, setIsCardNumberValid] = useState(true);
-  const [isExpirationDateValid, setIsExpirationDateValid] = useState(true);
-  const [isCVVValid, setIsCVVValid] = useState(true);
-  const [tokenizationError, setTokenizationError] = useState<string | null>(null);
+const cardContainerStyle: React.CSSProperties = {
+  maxWidth: '70%',
+  margin: '0 auto',
+  padding: '20px',
+};
 
+const cardPreviewStyle: React.CSSProperties = {
+  width:'20px',
+  height: '10px',
+  marginBottom: '10px',
+};
 
-  const styles = { ...customStyles };
+const Card = (
+  // eslint-disable-next-line
+  customStyles: CardFormWidgetProps,
+  onTokenReceived: (token: string, cardType: string) => void,
+): JSX.Element => {
+  console.log(customStyles);
 
-  const validateCardNumber = (value: string) => /^[0-9]{0,16}$/.test(value);
+  const useCard = () => {
+    let defaultCard: ReactCreditCardProps = {
+      cvc: '',
+      expiry: '',
+      name: '',
+      issuer: '',
+      number: '',
+      focused: undefined,
+    };
+    const [card, setCard] = useState<ReactCreditCardProps>(defaultCard);
 
-  useEffect(() => {
-    if (isCardNumberValid && isExpirationDateValid && isCVVValid && cardNumber && expirationDate && cvv) {
-      // Create an object with card data
-      const cardData = {
-        number: cardNumber.replace(/\s+/g, ''), // Remove spaces
-        expiryMonth: expirationDate.split('/')[0],
-        expiryYear: expirationDate.split('/')[1],
-        cvc: cvv,
-        cardType: getCardType(cardNumber),
-      };
-      // Call the payment service to create a card token
-      const response = createCardToken(cardData)
-      response.then((token) => {
-        // Handle the token (e.g., send it to your server for further processing)
-        if (token?.success === true) {
-          onTokenReceived(token.data);
-          setTokenizationError(null);
-          return;
-        }
-        return setTokenizationError("Card verification failed, check the card details.");
+    const handleSetCard = (key: string, value: any) => {
+      setCard({
+        ...card,
+        [key]: value,
+      });
+    };
 
-      })
-    }
-  }, [isCardNumberValid, isExpirationDateValid, isCVVValid, cardNumber, expirationDate, cvv]);
-
-  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = e.target.value;
-
-    // Remove all non-numeric characters and spaces
-    const numericValue = newValue.replace(/[^\d]/g, '');
-
-    // Limit the input to exactly 16 digits
-    if (numericValue.length > 16) {
-      return; // Do nothing if more than 16 digits
-    }
-
-    // Format with spaces: add a space every four digits
-    let formattedValue = numericValue.replace(/(\d{4})(?=\d)/g, '$1 ');
-
-    const isValid = formattedValue === '' || (validateCardNumber(numericValue) && numericValue.length <= 16);
-
-    setCardNumber(formattedValue);
-    setIsCardNumberValid(isValid);
+    return {
+      card,
+      handleSetCard,
+    };
   };
 
-  const handleExpirationDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newValue = e.target.value;
-  
-    // Remove all non-numeric characters
-    const numericValue = newValue.replace(/[^\d]/g, '');
-  
-    // Limit the input to a maximum of 7 characters (e.g., 05/2023)
-    if (numericValue.length > 7) {
-      return; // Do nothing if more than 7 characters
-    }
-  
-    // Format the input as "MM/YYYY"
-    let formattedValue = numericValue;
-  
-    if (numericValue.length > 2) {
-      formattedValue = `${numericValue.slice(0, 2)}/${numericValue.slice(2, 6)}`;
-    }
-  
-    // Validate the formatted value with a regular expression (accepts MM/YYYY only)
-    const isValid = formattedValue === '' || /^([1-9]|0[1-9]|1[0-2])\/(20\d{2})$/.test(formattedValue);
-  
-    setExpirationDate(formattedValue);
-    setIsExpirationDateValid(isValid);
-  };
-  
-  const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.value;
-
-    // Remove all non-numeric characters
-    const numericValue = newValue.replace(/[^\d]/g, '');
-
-    // Limit the input to a maximum of 3 digits
-    if (numericValue.length > 3) {
-      return;
-    }
-
-    // Check if the numericValue is empty (no digits) and avoid showing an error message
-    const isValid = numericValue === '' || /^\d{3}$/.test(numericValue);
-
-    setCVV(numericValue);
-    setIsCVVValid(isValid);
-  };
+  // For now, get order data from the one set in the store by the merchant page
+  const { card, handleSetCard } = useCard();
 
   return (
-    <div id="card-form-widget">
-      <h2 style={styles.textStyles?.head}>Enter Card Details</h2>
-      <form>
-        <div style={{ marginBottom: '10px' }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <label style={styles.textStyles?.body} htmlFor="cardNumber">Card Number </label>
-            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/visa.png" alt="visa" />
-            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/amex.png" alt="amex" />
-            <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/mastercard.png" alt="mastercard" />
-          </div>
-          <div >
-            <input
-              type="text"
-              id="cardNumber"
-              placeholder="Card Number"
-              value={cardNumber}
-              onChange={handleCardNumberChange}
-              style={{
-                ...styles.cardNumberInput,
-                ...(isCardNumberValid ? {} : styles.invalid),
-                width: '70%',
-                marginLeft: '5px',
-              }}
-            />
-          </div>
-        </div>
-        {!isCardNumberValid && <div className="error">Invalid Card Number</div>}
-        <div style={{ marginBottom: '10px' }}>
-          <label style={styles.textStyles?.body} htmlFor="expirationDate">Expiration Date </label>
-          <div>
-            <input
-              type="text"
-              id="expirationDate"
-              placeholder="MM/YYYY"
-              value={expirationDate}
-              onChange={handleExpirationDateChange}
-              style={{
-                ...styles.expirationDateInput,
-                ...(isExpirationDateValid ? {} : styles.invalid),
-                width: '70%',
-                marginLeft: '5px',
-                marginTop: '7px',
-              }}
-            />
-          </div>
-        </div>
-        {!isExpirationDateValid && <div className="error">Invalid Expiration Date</div>}
-        <div>
-          <label style={styles.textStyles?.body} htmlFor="cvv">CVV </label>
-          <div>
-            <input
-              type="text"
-              id="cvv"
-              placeholder="CVV"
-              value={cvv}
-              onChange={handleCVVChange}
-              style={{
-                ...styles.cvvInput,
-                ...(isCVVValid ? {} : styles.invalid),
-                width: '70%',
-                marginLeft: '5px',
-                marginTop: '7px',
-              }}
-            />
-          </div>
-        </div>
-        {!isCVVValid && <div className="error">Invalid CVV</div>}
+    <div style={cardContainerStyle}> {/* Apply your inline CSS style here */}
+      <div style={cardPreviewStyle}> {/* Apply your inline CSS style here */}
+        <Cards
+          number={(card.number as string).replace(/\d{4}(?=\d{4})/g, '####')}
+          cvc={(card.cvc as any).replace(/\d{1}(?=\d{1})/g, '*')}
+          expiry={card.expiry}
+          focused={card.focused}
+          name={card.name}
+          issuer={card.issuer}
+          preview
+        />
+      </div>
 
-        {tokenizationError && (
-          <div style={{ ...styles.feedback, ...styles.invalid, marginTop: '10px' }}>
-            {tokenizationError}
-          </div>
-        )}
-      </form>
+      <CardForm
+        card={card}
+        handleSetCard={handleSetCard}
+        onTokenReceived={onTokenReceived}
+      />
     </div>
   );
 };
 
-export default CardFormWidget;
+export default Card;
