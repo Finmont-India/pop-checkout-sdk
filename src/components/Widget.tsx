@@ -20,7 +20,7 @@ export interface WidgetProps {
     };
   };
   type: string;
-  onTokenReceived: (token: string) => void;
+  onTokenReceived: (token: string, cardType: string) => void;
 }
 
 const defaultStyles = {
@@ -50,7 +50,6 @@ const defaultStyles = {
       backgroundColor: 'white',
       border: '1px solid gray',
       padding: '6px',
-      margin: '2px',
       borderRadius: '5px',
     },
     expirationDateInput: {

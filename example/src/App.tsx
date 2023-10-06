@@ -26,6 +26,8 @@ const App = () => {
         padding: '20px',
         border: '1px solid gray',
         borderRadius: '5px',
+        display: "flex",
+        justifyContent: 'center',
       },
       cardStyles: {
         textStyles: {
@@ -45,23 +47,25 @@ const App = () => {
           backgroundColor: 'white',
           border: '1px solid gray',
           padding: '5px',
-          marhin: '2px',
+          margin: '2px',
           borderRadius: '5px',
+          height: '23px',
         },
         expirationDateInput: {
-          width: '80%',
+          width: '90%',
           backgroundColor: 'white',
           border: '1px solid gray',
           padding: '5px',
-          marhin: '2px',
+          margin: '2px',
           borderRadius: '5px',
+          height: '23px',
         },
         cvvInput: {
-          width: '80%',
+          width: '90%',
           backgroundColor: 'white',
           border: '1px solid gray',
-          padding: '5px',
-          marhin: '2px',
+          padding: '8px',
+          margin: '2px',
           borderRadius: '5px',
         },
         feedback: {
@@ -121,16 +125,17 @@ const App = () => {
 
   configureSdk(key, "dev");
 
-  const [token, setToken] = useState(''); // State to store the token
-  const { Widget, get3DSResponse, getPaymentResponse } = useSdk();
+  const [token, setToken] = useState<string>(''); // State to store the token
+  const [cardType, setCardType] = useState<string>('');
+  const { Widget, get3DSResponse, getPaymentResponse, Modal3DS } = useSdk();
 
   // Callback function to handle the received token
-  const handleTokenReceived = (receivedToken: string) => {
+  const handleTokenReceived = (receivedToken: string, type: string) => {
     setToken(receivedToken);
+    setCardType(type);
     // You can perform further actions with the token here
   };
-
-
+  
   const callGet3DSResponse = useCallback(async () => {
     try {
       const result = await get3DSResponse(recieptReference, reference);
@@ -140,14 +145,14 @@ const App = () => {
       console.error("Error:", error);
     }
   }, [recieptReference, reference, get3DSResponse]);
-  
+
   useEffect(() => {
     // Configure the SDK with your API key and environment (e.g., "dev")
     if (recieptReference && reference) {
       callGet3DSResponse();
     }
   }, [recieptReference, reference, callGet3DSResponse]);
-  
+
 
   const getPaymentStatus = async () => {
     if (recieptReference) {
@@ -156,20 +161,70 @@ const App = () => {
     }
   }
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const openModalWithUrlFunc = () => {
+    setIsModalOpen(true);
+
+  }
   return (
-    <div style={{display:'flex', flexDirection:'column'}}>
-      <Widget
-        type="card"
-        widgetStyles={widgetStyles}
-        onTokenReceived={handleTokenReceived} // Pass the callback function to the CardFormWidget
-      />
-      {/* Display the token */}
-      {token && <div>Received Token: {token}</div>}
-      <div style={{display:'flex', margin:'12px'}}>
-      <button style={{padding:'10px', borderRadius: '5px',margin:'12px'}} type="button" onClick={() => getPaymentStatus()}  >getPayment status</button>
-      <button style={{padding:'10px', borderRadius: '5px', margin:'12px'}} type="button" onClick={() => callGet3DSResponse()}  >getPayment 3Ds</button>
+    <>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <Widget
+          type="card"
+          widgetStyles={widgetStyles}
+          onTokenReceived={handleTokenReceived} // Pass the callback function to the CardFormWidget
+        />
+        {/* Display the token */}
+        {token && <div>Received Token: {token}</div>}
+        {cardType && <div>cardType: {cardType}</div>}
+        <div style={{ display: 'flex', margin: '12px' }}>
+          <button
+            style={{
+              padding: '10px',
+              borderRadius: '5px',
+              margin: '12px',
+            }} type="button"
+            onClick={() => getPaymentStatus()}
+          >
+            getPayment status
+          </button>
+          <button
+            style={{
+              padding: '10px',
+              borderRadius: '5px',
+              margin: '12px',
+            }}
+            type="button"
+            onClick={() => callGet3DSResponse()}
+          >getPayment 3Ds</button>
+          <button
+            style={{
+              padding: '10px',
+              borderRadius: '5px',
+              margin: '12px',
+            }}
+            type="button"
+            onClick={openModalWithUrlFunc}
+          >
+            get Modal
+          </button>
+
+        </div>
       </div>
-    </div>
+      {/* Modal */}
+      {isModalOpen && (
+        // @ts-ignore
+        <Modal3DS
+          isOpen={isModalOpen}
+          onClose={closeModal} 
+          url="https://pop-merchant-portal-dev.finmont.com/login"
+        />
+      )}
+    </>
   );
 };
 
