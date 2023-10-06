@@ -1,5 +1,5 @@
 /**
- * Default CSS definition for typescript,
+ * Default CSS definition for TypeScript,
  * will be overridden with file-specific definitions by rollup
  */
 declare module '*.css' {
@@ -7,11 +7,12 @@ declare module '*.css' {
   export default content;
 }
 
-interface SvgrComponent extends React.StatelessComponent<React.SVGAttributes<SVGElement>> {}
-
+// SVG files declaration
 declare module '*.svg' {
-  const svgUrl: string;
-  const svgComponent: SvgrComponent;
-  export default svgUrl;
-  export { svgComponent as ReactComponent }
+  import React = require('react');
+
+  export const ReactComponent: React.SFC<React.SVGProps<SVGSVGElement>>;
+  
+  const src: string;
+  export default src;
 }

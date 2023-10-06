@@ -3,6 +3,7 @@
 import { configure } from './config';
 import * as sdkFunctions from './services/sdkFunctions';
 import * as response3Ds from './services/response3Ds';
+import Modal3DS from './components/Modal3DS';
 import Widget from './components/Widget';
 
 let isSdkConfigured = false;
@@ -26,6 +27,7 @@ export const useSdk = () => {
     ...sdkFunctions,
     Widget,
     ...response3Ds,
+    Modal3DS,
   };
 };
 
