@@ -13,6 +13,7 @@
     align-items: center;
     margin-bottom: 15px;
   }
+
   
   .expiration-date-input input[type="text"] {
     border: none;
@@ -53,6 +54,25 @@
   
 }
 
+.input-container1 {
+  display: flex;
+  justify-content: space-between;;
+}
+
+/* For screens with a maximum width of 480px */
+@media (max-width: 480px) {
+  .input-container {
+    display: block; /* Change to block display for even smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .input-container1 {
+    width: 100% /* Change to block display for even smaller screens */
+  }
+}
+
+
 /* Card number input field */
 .card-number-input{
   background-color: #fff;
@@ -71,6 +91,19 @@
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 15px;
+  width:70%;
+}
+
+@media (max-width: 480px) {
+  .expiration-date-input{
+    width:85%
+}
+}
+
+@media (max-width: 480px) {
+  .cvv-input{
+  width:95%;
+}
 }
 
 .card-number-input input[type="text"],
@@ -129,5 +162,19 @@
   .invalid {
     border-color: #ff0000; /* Red border for invalid fields */
   }
+
+  /* For screens with a maximum width of 768px */
+@media (max-width: 768px) {
+  .card-form-widget {
+    width: 90%; /* Adjust the width as needed for smaller screens */
+  }
+}
+
+/* For screens with a maximum width of 480px */
+@media (max-width: 480px) {
+  .card-form-widget {
+    width: 100%; /* Adjust the width as needed for even smaller screens */
+  }
+}
   
   

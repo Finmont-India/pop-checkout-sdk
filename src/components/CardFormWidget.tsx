@@ -190,7 +190,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
  
         </div>
         <div className={`${styles['input-container']}`}>
-          <div className={`${styles['input-container']}`} >
+          <div className={`${styles['input-container1']}`} >
           <div className={`${styles['input-field']}`} style={{marginRight:'10px'}}>
             <label className={`${styles['body']} ${customStyles?.textStyles?.body ? styles[customStyles?.textStyles?.body] : ''}`} htmlFor="expirationMonth">Month</label>
             <div>
