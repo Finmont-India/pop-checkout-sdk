@@ -3,18 +3,14 @@
 /* Card Form Widget Container */
 .card-form-widget {
     width: 100%;
-    max-width: 400px;
     margin: 0 auto;
-    padding: 20px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+    background-color: white;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   /* Card Form Widget Header */
   .head {
-    font-size: 24px;
+    font-size: 12px;
     font-weight: bold;
     margin-bottom: 20px;
   }
@@ -23,30 +19,55 @@
   .body {
     font-size: 16px;
   }
+
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  width:full;
   
-  /* Card Number Input Container */
-  .card-number-input {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
+}
+
+.date-container {
+  display: flex;
+  justify-content: space-between;
+  margin-right: 0px;
+}
+
+
+
+@media screen and (max-width: 760px) {
+  .date-container {
+    padding-right: 10px; /* Change to block display for even smaller screens */
   }
-  
+}
+
+@media screen and (max-width: 480px) {
+  .input-container {
+    display: block; /* Change to block display for even smaller screens */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .date-container {
+    width: 100% /* Change to block display for even smaller screens */
+  }
+}
+
   /* Card Image */
   .card-img {
-    margin-right: 10px;
+    margin-right: 20px;
     width: 30px; /* Adjust the size as needed */
     height: 20px; /* Adjust the size as needed */
   }
   
   /* Card Number Input Field */
-  #cardNumber {
-    width: 100%;
+  .card-number-input {
+    display:flex;
     padding: 10px;
     border: 1px solid #ccc;
-    border-left: none;
     border-radius: 5px;
     font-size: 14px;
-    outline: none;
+    margin-bottom:10px
   }
   
   /* Error Message */
@@ -54,12 +75,6 @@
     color: #ff0000;
     font-size: 14px;
     margin-top: 5px;
-  }
-  
-  /* Input Container */
-  .input-container {
-    display: flex;
-    margin-bottom: 20px;
   }
   
   /* Input Field */
@@ -71,28 +86,38 @@
   .widget {
     /* Add any styles you want for the entire widget container here */
     /* For example, you can set the background color, padding, and border */
-    background-color: slategray;
-    padding: 20px;
-    border: 1px solid #ccc;
+    background-color: white;
+    border: none;
+    padding:20px;
     border-radius: 5px;
+    display: block;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   
-  /* Expiration Date Input Field */
-  #expirationMonth,
-  #expirationYear {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-    outline: none;
-  }
-  
+.expiration-date-input,
+.cvv-input{
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 480px) {
+  .expiration-date-input{
+    width:90%
+}
+}
+
+@media (max-width: 480px) {
+  .cvv-input{
+  width:95%;
+}
+}
   /* CVV Input Field */
-  #cvv {
-    width: 100%;
+  .cvv {
+    width: auto;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;

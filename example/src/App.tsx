@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { configureSdk, useSdk } from 'pop-checkout-sdk';
-import styles from './App.module.css'
+import './App.css'
 import 'pop-checkout-sdk/dist/index.css';
 
 const App = () => {
@@ -186,17 +186,19 @@ const App = () => {
   onTokenReceived={handleTokenReceived}
   /* widgetStyles={{
     customStyles: {
-      widget: styles['widget'], // Apply the 'widget' class to the entire widget container
+      widget: 'widget', // Apply the 'widget' class to the entire widget container
       cardStyles: {
-        cardFormWidget: styles['card-form-widget'],
+        cardFormWidget: 'card-form-widget',
         textStyles: {
-          head: styles['head'],
-          body:styles['body'],
+          head: 'head',
+          body:'body',
         },
-        cardNumberInput: styles['card-number-input'],
-        cardImg: styles['card-img'],
-        expirationDateInput: styles['expiration-date-input'],
-        cvvInput: styles['cvv-input'],
+        cardNumberInput: 'card-number-input',
+        cardImg: 'card-img',
+        expirationDateInput: 'expiration-date-input',
+        cvvInput: 'cvv-input',
+        inputContainer: 'input-container',
+        dateContainer: 'date-container',
         // Add more classes here...
       },
     },
