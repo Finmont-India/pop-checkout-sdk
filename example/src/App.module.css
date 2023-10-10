@@ -1,0 +1,110 @@
+/* styles.css */
+
+/* Card Form Widget Container */
+.card-form-widget {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Card Form Widget Header */
+  .head {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Card Form Widget Body */
+  .body {
+    font-size: 16px;
+  }
+  
+  /* Card Number Input Container */
+  .card-number-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Card Image */
+  .card-img {
+    margin-right: 10px;
+    width: 30px; /* Adjust the size as needed */
+    height: 20px; /* Adjust the size as needed */
+  }
+  
+  /* Card Number Input Field */
+  #cardNumber {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  /* Error Message */
+  .error {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* Input Container */
+  .input-container {
+    display: flex;
+    margin-bottom: 20px;
+  }
+  
+  /* Input Field */
+  .input-field {
+    flex: 1;
+    margin-right: 10px;
+  }
+  
+  .widget {
+    /* Add any styles you want for the entire widget container here */
+    /* For example, you can set the background color, padding, and border */
+    background-color: slategray;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  
+  /* Expiration Date Input Field */
+  #expirationMonth,
+  #expirationYear {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  /* CVV Input Field */
+  #cvv {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+  }
+  
+  /* Feedback and Invalid Message */
+  .feedback,
+  .invalid {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  

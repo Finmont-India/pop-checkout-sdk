@@ -1,0 +1,133 @@
+
+  .card-img{
+    border:none;
+  }
+  
+  /* Expiration date input field */
+  .expiration-date-input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .expiration-date-input input[type="text"] {
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    width: 100%;
+    font-size: 16px;
+  }
+
+  /* CombinedStyles.css */
+
+/* Widget container */
+.card-form-widget {
+  width:auto;
+  border: 1px solid gray;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 30px;
+  width: 60%;
+}
+
+/* Headline styles */
+.head {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Body text styles */
+.body {
+  font-size: 16px;
+}
+.input-container {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+/* Card number input field */
+.card-number-input{
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  width:auto;
+  margin-bottom: 15px;
+}
+
+.expiration-date-input,
+.cvv-input{
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.card-number-input input[type="text"],
+.expiration-date-input input[type="text"],
+.cvv-input input[type="text"] {
+  border: none;
+  outline: none;
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+/* Feedback message styles */
+.feedback {
+  font-size: 14px;
+  color: #ff0000; /* Red for error messages */
+}
+
+/* Invalid input field styles */
+.invalid {
+  border-color: #ff0000; /* Red border for invalid fields */
+}
+
+/* Success elements styles */
+.success {
+  color: green;
+  font-weight: bold;
+}
+
+  
+  /* CVV input field */
+  .cvv-input {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+  }
+  
+  .cvv-input input[type="text"] {
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    width: 100%;
+    font-size: 16px;
+  }
+  
+  /* Feedback message styles */
+  .feedback {
+    font-size: 14px;
+    color: #ff0000; /* Red for error messages */
+  }
+  
+  /* Invalid input field styles */
+  .invalid {
+    border-color: #ff0000; /* Red border for invalid fields */
+  }
+  
+  
