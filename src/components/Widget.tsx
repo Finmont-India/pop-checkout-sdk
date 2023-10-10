@@ -1,6 +1,6 @@
 import React from 'react';
 import CardFormWidget, { CardFormWidgetProps } from './CardFormWidget';
-import styles from './Widget.css';
+import './Widget.css';
 
 export interface WidgetProps {
   widgetStyles?: {
@@ -21,7 +21,7 @@ export const Widget: React.FC<WidgetProps> = ({ widgetStyles, type, onTokenRecei
   if (type.toLowerCase() === "card") {
     return (
       <div
-      className={`${styles['widget-container']} ${customStyles?.widget || ''}`}
+      className={`widget-container ${customStyles?.widget || ''}`}
     >
         <CardFormWidget customStyles={customStyles?.cardStyles} onTokenReceived={onTokenReceived} />
       </div>
