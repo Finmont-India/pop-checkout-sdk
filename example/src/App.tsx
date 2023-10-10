@@ -184,7 +184,7 @@ const App = () => {
       <Widget
   type="card"
   onTokenReceived={handleTokenReceived}
-  widgetStyles={{
+  /* widgetStyles={{
     customStyles: {
       widget: styles['widget'], // Apply the 'widget' class to the entire widget container
       cardStyles: {
@@ -200,7 +200,7 @@ const App = () => {
         // Add more classes here...
       },
     },
-  }}
+  }} */
 />
         {/* Display the token */}
         {token && <div>Received Token: {token}</div>}
