@@ -2,23 +2,31 @@ import React, { useEffect, useState } from 'react';
 import { createCardToken } from '../services/PaymentService';
 import { getCardType } from '../services/CardType';
 
-interface CardFormWidgetProps {
-  customStyles?: {
+
+import styles from './CardFormWidget.module.css'; // Import your CSS file (you should create this file with the defined class styles)
+
+export interface CardFormWidgetProps {
+    cardFormWidget?: string;
     textStyles?: {
-      head?: React.CSSProperties;
-      body?: React.CSSProperties;
+      head?: string;
+      body?: string;
     };
-    cardNumberInput?: React.CSSProperties;
-    expirationDateInput?: React.CSSProperties;
-    cvvInput?: React.CSSProperties;
-    feedback?: React.CSSProperties;
-    invalid?: React.CSSProperties;
-    success?: React.CSSProperties;
-  };
+    cardNumberInput?: string;
+    cardImg?: string;
+    expirationDateInput?: string;
+    cvvInput?: string;
+    invalid?:string;
+    error?: string;
+    feedback?: string;
+    // Add more styles here...
+}
+// In CardFormWidget.tsx in your SDK
+export interface CardWidgetProps {
+  customStyles?: CardFormWidgetProps;
   onTokenReceived: (token: string, cardType: string) => void;
 }
 
-const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenReceived }) => {
+const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceived }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expirationMonth, setExpirationMonth] = useState('');
   const [cvv, setCVV] = useState('');
@@ -30,7 +38,6 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
   const [tokenizationError, setTokenizationError] = useState<string | null>(null);
   const [cardType, setCardType] = useState<string>('');
 
-  const styles = { ...customStyles };
 
   const getCardIconSVG = (cardType: string) => {
     switch (cardType.toLowerCase()) {
@@ -82,7 +89,8 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
             return setTokenizationError('Card verification failed, check the card details.');
           }
         } else {
-          onTokenReceived("","");
+
+          onTokenReceived("", "");
           return setTokenizationError('Card verification failed, check the card details.');
         }
       });
@@ -92,9 +100,11 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
+    console.log(newValue)
 
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
+    console.log(numericValue)
 
     // Limit the input to a maximum of 19 digits (credit card number maximum length)
     if (numericValue.length > 19) {
@@ -119,13 +129,13 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
     const newValue = e.target.value;
     setExpirationMonth(newValue);
     if (/^(0[1-9]|1[0-2])$/.test(newValue) || newValue === '') {
-      
+
       setIsExpirationMonth(true);
     } else {
       setIsExpirationMonth(false);
     }
   };
-  
+
   const handleExpirationYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
     setExpirationYear(newValue);
@@ -136,8 +146,8 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
       setIsExpirationYear(false);
     }
   };
-  
-  
+
+
 
   const handleCVVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -158,112 +168,85 @@ const CardFormWidget: React.FC<CardFormWidgetProps> = ({ customStyles, onTokenRe
   };
 
   return (
-    <div id="card-form-widget">
-      <h2 style={styles.textStyles?.head}>Enter Card Details</h2>
+    <div className={`${styles['card-form-widget']} ${customStyles?.cardFormWidget ? styles[customStyles?.cardFormWidget] : ''}`}>
+      <h2 className={`${styles['head']} ${customStyles?.textStyles?.head ? styles[customStyles?.textStyles?.head] : ''}`}>Enter Card Details</h2>
       <form>
-        <div style={{ marginBottom: '10px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <label style={styles.textStyles?.body} htmlFor="cardNumber">Card Number </label>
-              <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/visa.png" alt="visa" />
-              <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/amex.png" alt="amex" />
-              <img width="40" height="34" src="https://img.icons8.com/3d-fluency/94/mastercard.png" alt="mastercard" />
-            </div>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              
-              ...styles.cardNumberInput,
-              ...(isCardNumberValid ? {} : styles.invalid),
-            }}>
-              <div>{getCardIconSVG(cardType)}</div>
+        <div >
+          <label className={`${styles['body']} ${customStyles?.textStyles?.body ? styles[customStyles?.textStyles?.body] : ''}`} htmlFor="cardNumber">
+            Card Number
+          </label>
+          <div className={`${styles['card-number-input']} ${customStyles?.cardNumberInput ? styles[customStyles?.cardNumberInput] : ''}`}>
+            <div className={`${styles['card-img']} ${customStyles?.cardImg ? styles[customStyles?.cardImg] : ''}`}>{getCardIconSVG(cardType)}</div>
+            <input
+              type="text"
+              id="cardNumber"
+              placeholder="Card Number E.g.: 49..., 51..., 36..., 37..."
+              onChange={handleCardNumberChange}
+              value={cardNumber}
+              style={{ border: 'none', borderLeft: '1px solid gray', paddingLeft: '5px', width: '100%', outline: 'none' }}
+            />
+          </div>
+          {!isCardNumberValid && <div className={`${styles['error']} ${customStyles?.error ? styles[customStyles?.error] : ''}`}>Invalid card number</div>}
+ 
+        </div>
+        <div className={`${styles['input-container']}`}>
+          <div className={`${styles['input-container']}`} >
+          <div className={`${styles['input-field']}`} style={{marginRight:'10px'}}>
+            <label className={`${styles['body']} ${customStyles?.textStyles?.body ? styles[customStyles?.textStyles?.body] : ''}`} htmlFor="expirationMonth">Month</label>
+            <div>
               <input
                 type="text"
-                id="cardNumber"
-                placeholder="Card Number E.g.: 49..., 51..., 36..., 37..."
-                value={cardNumber}
-                onChange={handleCardNumberChange}
-                style={{
-                  border: 'none',
-                  outline: 'none',
-                  marginLeft: '2px',
-                }}
+                id="expirationMonth"
+                value={expirationMonth}
+                placeholder="MM"
+                onChange={handleExpirationMonthChange}
+                className={`${styles['expiration-date-input']} ${customStyles?.expirationDateInput ? styles[customStyles?.expirationDateInput] : ''}`}
               />
             </div>
+            {!isExpirationMonth && <div className={`${styles['error']} ${customStyles?.error ? styles[customStyles?.error] : ''}`}>Invalid month</div>}
+ 
           </div>
-        </div>
-        {!isCardNumberValid && <div className="error">Invalid Card Number</div>}
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '25px' }}>
-          <div style={{ width: '27%' }}>
-            <label htmlFor="expirationMonth">Month</label>
+          <div className={`${styles['input-field']}`}>
+            <label className={`${styles['body']} ${customStyles?.textStyles?.body ? styles[customStyles?.textStyles?.body] : ''}`} htmlFor="expirationYear">Year</label>
             <div>
-            <input
-              type="text"
-              id="expirationMonth"
-              placeholder="MM"
-              style={{
-                ...styles.expirationDateInput,
-                ...(isExpirationMonth ? {} : styles.invalid),
-                
-                marginLeft: '2px',
-                marginTop: '7px',
-              }}
-              value={expirationMonth}
-              onChange={handleExpirationMonthChange}
-            />
+              <input
+                type="text"
+                id="expirationYear"
+                value={expirationYear}
+                placeholder="YYYY"
+                onChange={handleExpirationYearChange}
+                className={`${styles['expiration-date-input']} ${customStyles?.expirationDateInput ? styles[customStyles?.expirationDateInput] : ''}`}
+              />
             </div>
-            {!isExpirationMonth && <div className="error">Invalid month</div>}
+            {!isExpirationYear && <div className={`${styles['error']} ${customStyles?.error ? styles[customStyles?.error] : ''}`}>Invalid year</div>}
+ 
           </div>
-          <div style={{ width: '27%', marginRight: '10px'}}>
-            <label htmlFor="expirationYear">Year</label>
-            <div>
-            <input
-              type="text"
-              id="expirationYear"
-              placeholder="YYYY"style={{
-                ...styles.expirationDateInput,
-                ...(isExpirationYear ? {} : styles.invalid),
-                
-                marginLeft: '2px',
-                marginTop: '7px',
-              }}
-
-              value={expirationYear}
-              onChange={handleExpirationYearChange}
-            />
-            </div>
-            {!isExpirationYear && <div className="error">Invalid year</div>}
           </div>
-          <div style={{ width: '27%' }}>
-            <label style={styles.textStyles?.body} htmlFor="cvv">CVV </label>
+          <div className={`${styles['input-field']}`}>
+            <label className={`${styles['body']} ${customStyles?.textStyles?.body ? styles[customStyles?.textStyles?.body] : ''}`} htmlFor="cvv">CVV</label>
             <div>
               <input
                 type="text"
                 id="cvv"
-                placeholder="CVV"
                 value={cvv}
+                placeholder="CVV"
                 onChange={handleCVVChange}
-                style={{
-                  ...styles.cvvInput,
-                  ...(isCVVValid ? {} : styles.invalid),
-                  
-                  marginLeft: '2px',
-                  marginTop: '7px',
-                }}
+                className={`${styles['cvv-input']} ${customStyles?.cvvInput ? styles[customStyles?.cvvInput] : ''}`}
               />
             </div>
-            {!isCVVValid && <div className="error">Invalid CVV</div>}
+            {!isCVVValid && <div className={`${styles['error']} ${customStyles?.error ? styles[customStyles?.error] : ''}`}>Invalid cvv</div>}
+ 
           </div>
         </div>
       </form>
       {tokenizationError && (
-        <div style={{ ...styles.feedback, ...styles.invalid, marginTop: '10px' }}>
+        <div className={`${styles['feedback']} ${customStyles?.error ? styles[customStyles?.error] : ''}`}>
           {tokenizationError}
         </div>
       )}
     </div>
   );
-  
 };
+
 
 export default CardFormWidget;

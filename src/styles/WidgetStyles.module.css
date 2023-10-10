@@ -1,0 +1,71 @@
+/* WidgetStyles.module.css */
+
+/* Styles for the main Widget component */
+.custom-widget {
+    background-color: lightgray;
+    padding: 20px;
+    border: 1px solid gray;
+    border-radius: 5px;
+  }
+  
+  /* Styles for text elements within the Widget component */
+  .custom-widget .head {
+    color: red;
+    font-size: 15px;
+    font-weight: bold;
+  }
+  
+  .custom-widget .body {
+    color: black;
+    font-size: 15px;
+    font-weight: normal;
+  }
+  
+  /* Styles for the CardFormWidget component */
+  .custom-card-widget {
+    background-color: white;
+    /* Define styles for card input elements */
+  }
+  
+  .custom-card-widget .card-number-input {
+    width: 80%;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 6px;
+    border-radius: 5px;
+  }
+  
+  .custom-card-widget .expiration-date-input {
+    width: 80%;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 6px;
+    margin: 2px;
+    border-radius: 5px;
+  }
+  
+  .custom-card-widget .cvv-input {
+    width: 80%;
+    background-color: white;
+    border: 1px solid gray;
+    padding: 6px;
+    margin: 2px;
+    border-radius: 5px;
+  }
+  
+  .custom-card-widget .feedback {
+    color: red;
+    font-size: 14px;
+  }
+  
+  .custom-card-widget .invalid {
+    border-color: red;
+  }
+  
+  .custom-card-widget .success {
+    color: green;
+    font-weight: bold;
+  }
+  
+  /* Add more styles as needed for other elements */
+  
