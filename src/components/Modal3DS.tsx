@@ -76,7 +76,9 @@ useEffect(() => {
       <div style={modalStyles.modalContent}>
         <span style={modalStyles.close} onClick={onClose}>&times;</span>
         <div style={modalStyles.iframeContainer}>
-          <iframe src={url} title="3DS Modal Content" style={modalStyles.iframe}></iframe>
+          <iframe src={url} title="3DS Modal Content" style={modalStyles.iframe} onLoad={() => {
+              window.postMessage('iframeLoaded', 'YOUR_IFRAME_ORIGIN');
+            }}></iframe>
         </div>
       </div>
     </div>
