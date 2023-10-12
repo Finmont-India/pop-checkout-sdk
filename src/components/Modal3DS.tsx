@@ -48,7 +48,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; }>
 
 const [iframeLoaded, setIframeLoaded] = useState(false);
 const iframeUrl= new URL(url).origin;
-console.log(iframeUrl)
 
 const handleIframeMessage = (event: MessageEvent) => {
   if (event.origin === iframeUrl && event.data === 'iframeLoaded') {
