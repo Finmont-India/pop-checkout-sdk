@@ -47,16 +47,18 @@ const modalStyles = {
 const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; }> = ({ isOpen, onClose, url, }) => {
 
 const [iframeLoaded, setIframeLoaded] = useState(false);
+const iframeUrl= new URL(url).origin;
+console.log(iframeUrl)
 
 const handleIframeMessage = (event: MessageEvent) => {
-  if (event.origin === 'YOUR_IFRAME_ORIGIN' && event.data === 'iframeLoaded') {
+  if (event.origin === iframeUrl && event.data === 'iframeLoaded') {
     // The iframe has loaded, so it's safe to start observing URL changes
     setIframeLoaded(true);
-  } else if (iframeLoaded && event.origin === 'YOUR_IFRAME_ORIGIN') {
+  } else if (iframeLoaded && event.origin === iframeUrl) {
     // Check if the message contains the new URL
     // You may need to modify this check based on the specific structure of the message
     const newURL = event.data;
-    if (newURL && newURL !== url) {
+    if (newURL && newURL !== iframeUrl) {
       window.location.href=newURL;
     }
   }
@@ -77,7 +79,7 @@ useEffect(() => {
         <span style={modalStyles.close} onClick={onClose}>&times;</span>
         <div style={modalStyles.iframeContainer}>
           <iframe src={url} title="3DS Modal Content" style={modalStyles.iframe} onLoad={() => {
-              window.postMessage('iframeLoaded', 'YOUR_IFRAME_ORIGIN');
+              window.postMessage('iframeLoaded', url);
             }}></iframe>
         </div>
       </div>
