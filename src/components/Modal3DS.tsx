@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef} from 'react';
+import { SpinnerCircular } from 'spinners-react';
 
 const modalStyles = {
   modalBackground: {
@@ -11,13 +12,12 @@ const modalStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    zIndex: 999,
   },
   modalContent: {
     backgroundColor: 'white',
     padding: '0',
     borderRadius: '5px',
-    width: '80%',
+    width: '60%',
     height: '80vh',
     position: 'relative' as 'relative',
   },
@@ -26,6 +26,9 @@ const modalStyles = {
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+    marginTop: '50px',
+    marginLeft: '20px',
+    marginRight: '20px',
   },
   close: {
     position: 'absolute' as 'absolute',
@@ -34,57 +37,63 @@ const modalStyles = {
     fontSize: '20px',
     cursor: 'pointer',
     color: '#333',
-    zIndex: 1000,
+    zIndex: 10000,
   },
   iframe: {
     border: 'none',
     width: '100%',
     height: '100%',
+    zIndex: 100,
   },
 };
 
+const Modal3DS: React.FC<{ open: boolean; onClose: () => void; url: string; setRes: any }> = ({ open, onClose, url, setRes }) => {
+  const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
-const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; }> = ({ isOpen, onClose, url, }) => {
+  useEffect(() => {
+    const checkIframeUrl = () => {
+      if (iframeRef.current && iframeRef.current.contentWindow) {
+        const currentIframeUrl: any = iframeRef.current.contentWindow.location.href;
+        const query = currentIframeUrl.split('?')[1];
+        const paramPairs = query.split('&');
+        const params = {};
 
-const [iframeLoaded, setIframeLoaded] = useState(false);
-const iframeUrl= new URL(url).origin;
+        for (const pair of paramPairs) {
+          const [key, value] = pair.split('=');
+          params[key] = value;
+        }
 
-const handleIframeMessage = (event: MessageEvent) => {
-  if (event.origin === iframeUrl && event.data === 'iframeLoaded') {
-    // The iframe has loaded, so it's safe to start observing URL changes
-    setIframeLoaded(true);
-  } else if (iframeLoaded && event.origin === iframeUrl) {
-    // Check if the message contains the new URL
-    // You may need to modify this check based on the specific structure of the message
-    const newURL = event.data;
-    if (newURL && newURL !== iframeUrl) {
-      window.location.href=newURL;
-    }
-  }
-};
+        const reference = params['reference'];
+        const receiptReference = params['receiptReference'];
+        setRes({ reference, receiptReference });
+        onClose();
+      }
+    };
 
-useEffect(() => {
-  window.addEventListener('message', handleIframeMessage);
+    const intervalId = setInterval(checkIframeUrl, 1000);
 
-  return () => {
-    window.removeEventListener('message', handleIframeMessage);
-  };
-}, [onClose, url, iframeLoaded]);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [setRes]);
 
   return (
-    isOpen ? (
-    <div style={modalStyles.modalBackground}>
-      <div style={modalStyles.modalContent}>
-        <span style={modalStyles.close} onClick={onClose}>&times;</span>
-        <div style={modalStyles.iframeContainer}>
-          <iframe src={url} title="3DS Modal Content" style={modalStyles.iframe} onLoad={() => {
-              window.postMessage('iframeLoaded', url);
-            }}></iframe>
+    (open) ? (
+      <div style={modalStyles.modalBackground}>
+        <div style={modalStyles.modalContent}>
+          <span style={modalStyles.close} onClick={()=>onClose()}>&times;</span>
+          <div style={modalStyles.iframeContainer}>
+            <iframe
+              ref={(iframe) => { iframeRef.current = iframe; }}
+              src={url}
+              title="3DS Modal Content"
+              style={modalStyles.iframe}
+            ></iframe>
+          </div>
         </div>
       </div>
-    </div>
-  ) : null
-);
-    };
+    ) : <SpinnerCircular />
+  );
+};
 
 export default Modal3DS;
