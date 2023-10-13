@@ -17,7 +17,7 @@ export const getCachedRequest = async(reference: string) => {
 
     try {
       const response: AxiosResponse = await axios.get(
-        `${BASE_URL}/payment-session/${reference}&platform=sdk`,
+        `${BASE_URL}/payment-session/${reference}?platform=sdk`,
         // @ts-ignore
         {headers}
       );

@@ -14,7 +14,6 @@ export interface WidgetProps {
 }
 
 export const Widget: React.FC<WidgetProps> = ({ widgetStyles, type, onTokenReceived }) => {
-  console.log(widgetStyles);
   // Destructure the customStyles property
   const { customStyles } = widgetStyles || {};
 

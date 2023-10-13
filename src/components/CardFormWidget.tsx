@@ -78,10 +78,8 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
       response.then((token) => {
         // Handle the token (e.g., send it to your server for further processing)
         if (token?.success === true) {
-          console.log(token)
           const receivedToken = token?.data?.data || '';
           const cardType = token?.data?.cardType || '';
-          console.log(typeof receivedToken, receivedToken, typeof cardType);
           if (typeof receivedToken === 'string' && typeof cardType === 'string') {
             onTokenReceived(receivedToken, cardType);
             setTokenizationError(null);
@@ -101,11 +99,9 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
 
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let newValue = e.target.value;
-    console.log(newValue)
 
     // Remove all non-numeric characters and spaces
     const numericValue = newValue.replace(/[^\d]/g, '');
-    console.log(numericValue)
 
     // Limit the input to a maximum of 19 digits (credit card number maximum length)
     if (numericValue.length > 19) {
