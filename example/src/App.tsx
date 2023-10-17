@@ -7,14 +7,11 @@ import 'pop-checkout-sdk/dist/index.css';
 
 const App = () => {
 
-  const params = new URLSearchParams(window.location.search);
-  const recieptRef = params.get("receiptReference");
-  const ref = params.get("reference");
-  const recieptReference = recieptRef ? recieptRef : '';
-  const reference = ref ? ref : '';
   const [paymentResult, setPaymentResult] = useState<any>();
+  const [res, setRes] = useState<{ reference: string, receiptReference: string }>({ reference: '', receiptReference: '' });
   console.log(paymentResult);
 
+  const [url3ds, seturl3ds] = useState<any>('');
   const key =
     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6ImFsbCB0b2tlbmlzYXRpb24gYXV0aG9yaXNhdGlvbiIsIm1lcmNoYW50UmVmZXJlbmNlIjoiZTY2MDRiY2YtYTFiNS00ZTJlLWIzZDAtYTFhNmE4OWIzZjA5IiwiZXhwIjoyMDUxMDU4MjM4LCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.CxeveIRYjl_p8pJ5z7alqj20IhYBr_sq9IWOmzSY1EuTEDhT3rR5cfbmfaZtnL-vyhPUI46hZMNzz2bXNGmtrdrcXyank1OZIChTa-tsR4ZT08u3aN56KzzDSB9j-l08NdNgTWIctWp5pUfCm0to_MjlagrznoYghyu-RbP51Kf85kaH2SlKTFInwWIaT5L_5eDEGERItSFsh67L5Oev44VpAlxKSUpRqpgf9Ej6jTXzqUGhn_a0qwPwLBd7zTC7qsnKNt_VVDe2O3ddgs9FGJMkvWNiLwEqz47ffP4nsm-9q52cSH3gylfx8z8wEs0ZL9ZcGTUb0BEwnFpadO3hZbTMVEUjoHzQZloRXVJg3vTzl1z23wF0ra7N18KY69VT4cc_m76eYYU-QyqaGfi-dxUrJlZzdx1bVkDMnsZyK3MC4TGnhV9TGWbkPNaxxxJGIlrcUQnaZRm494zpIOHAMpoCKpYe1yxF-0qKH5_sr4qYkpKuEy_d1mn74Oy0p2fqaXLqnmbsg1ALcQt5zgL-WyKpo8n_n4EHf7YuN6ZrJl23l-0VEo9AG-7kcK1l2icjfPFL5-_rTa04E_DeuCowBOBWgXqqpvhE5W3OASc8cy9pN2pMbOZYfD_r2vVw8OMHCmFMceIZgkprP4j_hDe1Ml3LoAdtFUtux8jSrOte6T4"; // Replace with your API key
 
@@ -91,7 +88,7 @@ const App = () => {
     }
   }; */
 
-  /* const order = {
+  const order = {
     amount: {
       currency: "GBP",
       value: 100
@@ -99,7 +96,6 @@ const App = () => {
     customerEmail: "shopper@gmail.com",
     order: {
       reference: "1255",
-      orderPayloadReference: "8bb1558a-21ac-43c6-8c20-de6c5572023e"
     },
     billingAddress: {
       city: "Berlin",
@@ -110,8 +106,10 @@ const App = () => {
       stateProvince: "Berl",
       street: "Laurens"
     },
+
+    orderPayloadReference: "8bb1558a-21ac-43c6-8c20-de6c5572023e",
     browserInfo: {
-      acceptHeader: "",
+      acceptHeader: "EN",
       colorDepth: 24,
       ip: "192.168.12.1",
       javaEnabled: true,
@@ -128,14 +126,14 @@ const App = () => {
       token: "67ae538a-1559-4e63-b416-08b91c02368c",
       type: "visa"
     },
-    returnUrl: "http://localhost:3001",
-  } */
+    returnUrl: "http://localhost:3000",
+  }
 
   configureSdk(key, "dev");
 
   const [token, setToken] = useState<string>(''); // State to store the token
   const [cardType, setCardType] = useState<string>('');
-  const { Widget, get3DSResponse, getPaymentResponse, Modal3DS } = useSdk();
+  const { Widget, get3DSResponse, getPaymentResponse, Modal3DS, authorizeCard } = useSdk();
 
   // Callback function to handle the received token
   const handleTokenReceived = (receivedToken: string, type: string) => {
@@ -143,34 +141,29 @@ const App = () => {
     setCardType(type);
     // You can perform further actions with the token here
   };
-  
+
   const callGet3DSResponse = useCallback(async () => {
     try {
-      const result = await get3DSResponse(recieptReference, reference);
+      const result = await get3DSResponse(res.receiptReference, res.reference);
       setPaymentResult(result);
       console.log("Payment Result:", result);
     } catch (error) {
       console.error("Error:", error);
     }
-  }, [recieptReference, reference, get3DSResponse]);
-
-  useEffect(() => {
-    // Configure the SDK with your API key and environment (e.g., "dev")
-    if (recieptReference && reference) {
-      callGet3DSResponse();
-    }
-  }, [recieptReference, reference, callGet3DSResponse]);
+  }, [res.receiptReference, res.reference, get3DSResponse]);
 
 
   const getPaymentStatus = async () => {
-    if (recieptReference) {
-      const resp = await getPaymentResponse(recieptReference, key, "dev");
+    if (res.receiptReference) {
+      console.log("get resp")
+      const resp = await getPaymentResponse(res.receiptReference, key, "dev");
       console.log(resp);
     }
   }
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => {
+    console.log("modalClosed");
     setIsModalOpen(false);
   };
 
@@ -178,32 +171,60 @@ const App = () => {
     setIsModalOpen(true);
 
   }
+  useEffect(() => {
+    // Configure the SDK with your API key and environment (e.g., "dev")
+    if (res.receiptReference && res.reference) {
+      callGet3DSResponse();
+    }
+  }, [key, callGet3DSResponse, res.reference, res.receiptReference]);
+
+  const orderReq = {
+    ...order,
+    card: {
+      token: token,
+      type: 'visa'
+    }
+  }; console.log(res);
+  // Define a function to handle the authorization
+  const handleAuthorizeCard = async () => {
+    if (token) {
+      console.log("calling");
+      const res = await authorizeCard(orderReq);
+      console.log(res);
+      seturl3ds(res.response3Ds.url)
+      setIsModalOpen(true);
+    }
+  };
+
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
-      <Widget
-  type="card"
-  onTokenReceived={handleTokenReceived}
-  /* widgetStyles={{
-    customStyles: {
-      widget: 'widget', // Apply the 'widget' class to the entire widget container
-      cardStyles: {
-        cardFormWidget: 'card-form-widget',
-        textStyles: {
-          head: 'head',
-          body:'body',
-        },
-        cardNumberInput: 'card-number-input',
-        cardImg: 'card-img',
-        expirationDateInput: 'expiration-date-input',
-        cvvInput: 'cvv-input',
-        inputContainer: 'input-container',
-        dateContainer: 'date-container',
-        // Add more classes here...
-      },
-    },
-  }} */
-/>
+        <Widget
+          type="card"
+          onTokenReceived={handleTokenReceived}
+          widgetStyles={{
+            customStyles: {
+              widget: 'widget', // Apply the 'widget' class to the entire widget container
+              cardStyles: {
+                cardFormWidget: 'card-form-widget',
+                textStyles: {
+                  head: 'head',
+                  body: 'body',
+                },
+                cardNumberInput: 'card-number-input',
+                cardImg: 'card-img',
+                expirationDateInput: 'expiration-date-input',
+                cvvInput: 'cvv-input',
+                inputContainer: 'input-container',
+                dateContainer: 'date-container',
+                // Add more classes here...
+              },
+            },
+          }}
+        />
+        <button onClick={handleAuthorizeCard} type="button">
+          Pay Securely
+        </button>
         {/* Display the token */}
         {token && <div>Received Token: {token}</div>}
         {cardType && <div>cardType: {cardType}</div>}
@@ -214,7 +235,7 @@ const App = () => {
               borderRadius: '5px',
               margin: '12px',
             }} type="button"
-            onClick={() => getPaymentStatus()}
+            onClick={getPaymentStatus}
           >
             getPayment status
           </button>
@@ -225,7 +246,7 @@ const App = () => {
               margin: '12px',
             }}
             type="button"
-            onClick={() => callGet3DSResponse()}
+            onClick={callGet3DSResponse}
           >getPayment 3Ds</button>
           <button
             style={{
@@ -246,8 +267,9 @@ const App = () => {
         // @ts-ignore
         <Modal3DS
           isOpen={isModalOpen}
-          onClose={closeModal} 
-          url="https://pop-merchant-portal-dev.finmont.com/login"
+          onClose={closeModal}
+          url={url3ds}
+          setRes={setRes}
         />
       )}
     </>
