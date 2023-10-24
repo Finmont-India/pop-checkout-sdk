@@ -51,10 +51,9 @@ export const createCardToken = async (cardData: any) => {
       // Something happened in setting up the request that triggered an error
       console.error('Error:', error.message);
     }
-
+    isCreateCardTokenInProgress = false; 
     // Return an error object or throw an error as needed
-    return { success: false, error: error.message };
-  } finally {
-    isCreateCardTokenInProgress = false; // Reset the flag when the request is complete
-  }
+    return { success: false, data: {error: error.response.data, message: error.message}
+  } 
+}
 };

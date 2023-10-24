@@ -39,7 +39,7 @@ export const getCachedRequest = async(reference: string) => {
     }
 
     // Return an error object or throw an error as needed
-    throw error;
+    throw error.response.data;
   }
 }
 
@@ -75,11 +75,10 @@ export const get3DSObject = async (recieptReference: string) => {
     } else if (error.request) {
       // The request was made, but no response was received
       console.error('No response received from the server');
-      return error;
     } else {
       // Something happened in setting up the request that triggered an error
       console.error('Error:', error.message);
-      return error;
     }
+    throw error.response.data;
   }
 }
