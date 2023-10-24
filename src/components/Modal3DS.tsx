@@ -1,60 +1,28 @@
-import React, { useEffect, useRef} from 'react';
-import { SpinnerCircular } from 'spinners-react';
+import React, { useRef, useEffect, useCallback, useState } from "react";
+import Modal from "react-modal";
+import { get3DSResponse } from "../services/response3Ds";
+import { SpinnerCircular } from "spinners-react";
 
-const modalStyles = {
-  modalBackground: {
-    position: 'fixed' as 'fixed',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'white',
-    padding: '0',
-    borderRadius: '5px',
-    width: '60%',
-    height: '80vh',
-    position: 'relative' as 'relative',
-  },
-  iframeContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    marginTop: '50px',
-    marginLeft: '20px',
-    marginRight: '20px',
-  },
-  close: {
-    position: 'absolute' as 'absolute',
-    top: '10px',
-    right: '10px',
-    fontSize: '20px',
-    cursor: 'pointer',
-    color: '#333',
-    zIndex: 10000,
-  },
-  iframe: {
-    border: 'none',
-    width: '100%',
-    height: '100%',
-    zIndex: 100,
-  },
-};
-
-const Modal3DS: React.FC<{ open: boolean; onClose: () => void; url: string; setRes: any }> = ({ open, onClose, url, setRes }) => {
+const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; setRes: any }> = ({ isOpen, onClose, url, setRes }) => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [iframeUrl, setIframeUrl] = useState(url);
 
-  useEffect(() => {
-    const checkIframeUrl = () => {
-      if (iframeRef.current && iframeRef.current.contentWindow) {
-        const currentIframeUrl: any = iframeRef.current.contentWindow.location.href;
-        const query = currentIframeUrl.split('?')[1];
+
+  const callGet3DSResponse = useCallback(async (receiptRef: string,ref: string) => {
+    try {
+      const result = await get3DSResponse(receiptRef, ref);
+      setRes(result);
+      onClose();
+    } catch (error) {
+      console.error("Error:", error);
+      setRes(error)
+    }
+  }, [get3DSResponse]);
+
+  const checkIframeUrl = useCallback((currentIframe) => {
+    if (currentIframe) {
+      if (currentIframe && currentIframe !== url) {
+        const query = currentIframe.split('?')[1] || '';
         const paramPairs = query.split('&');
         const params = {};
 
@@ -65,34 +33,94 @@ const Modal3DS: React.FC<{ open: boolean; onClose: () => void; url: string; setR
 
         const reference = params['reference'];
         const receiptReference = params['receiptReference'];
-        setRes({ reference, receiptReference });
-        onClose();
+        if (receiptReference && reference) {
+          callGet3DSResponse(receiptReference,reference);
+        }
+      }
+    }
+  }, [url, setRes]);
+
+
+  useEffect(() => {
+    const handleMessage = (event: any) => {
+      // Check if the message is from the iframe and if data is a URL
+      if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
+        // Handle the URL received from the iframe
+        setIframeUrl('');
+        checkIframeUrl(event.data);
       }
     };
 
-    const intervalId = setInterval(checkIframeUrl, 1000);
+    // Add an event listener to listen for messages
+    window.addEventListener('message', handleMessage);
 
     return () => {
-      clearInterval(intervalId);
+      window.removeEventListener('message', handleMessage);
     };
-  }, [setRes]);
+  }, [iframeRef]);
 
   return (
-    (open) ? (
-      <div style={modalStyles.modalBackground}>
-        <div style={modalStyles.modalContent}>
-          <span style={modalStyles.close} onClick={()=>onClose()}>&times;</span>
-          <div style={modalStyles.iframeContainer}>
-            <iframe
-              ref={(iframe) => { iframeRef.current = iframe; }}
-              src={url}
-              title="3DS Modal Content"
-              style={modalStyles.iframe}
-            ></iframe>
-          </div>
-        </div>
-      </div>
-    ) : <SpinnerCircular />
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      shouldCloseOnOverlayClick={false} // Prevent closing on overlay click
+      shouldCloseOnEsc={false} // Prevent closing on pressing Esc key
+      // @ts-ignore
+      style={{
+        overlay: {
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        },
+        content: {
+          backgroundColor: 'white',
+          border: 'none',
+          padding: '0',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '50%',
+          height: '60%',
+          left: '25%',
+          top: '20%',
+        },
+      }}
+      contentLabel="3ds Modal"
+      ariaHideApp={false}
+    >
+      {iframeUrl!== url ? ( // Display loading spinner while isLoading is true
+        <SpinnerCircular
+          size={40} // Adjust the size as needed
+          thickness={70} // Adjust the thickness as needed
+          speed={50} // Adjust the speed as needed
+        />
+      ) : (
+        <iframe
+          title="Form"
+          ref={iframeRef}
+          src={iframeUrl}
+          id="myIframe"
+          style={{
+            pointerEvents: 'auto',
+            border: 'none',
+            width: '90%',
+            height: '100%',
+            outline: 'none',
+          }}
+        />
+      )}
+      <button
+        onClick={onClose}
+        style={{
+          backgroundColor: "transparent",
+          border: 'none',
+          fontSize: '20px',
+          marginTop: '10px',
+          alignSelf: iframeUrl === url ? 'flex-start' : 'flex-end',
+          display: iframeUrl === url ? 'flex' : 'none',
+        }}
+      >
+        &times;
+      </button>
+    </Modal>
   );
 };
 
