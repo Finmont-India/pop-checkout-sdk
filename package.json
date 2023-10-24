@@ -1,6 +1,6 @@
 {
   "name": "finmont-checkout-sdk",
-  "version": "1.0.8",
+  "version": "1.1.6",
   "private": false,
   "description": "library that supports the payment elements and modules",
   "author": "Finmont",
