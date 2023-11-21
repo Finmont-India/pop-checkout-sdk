@@ -10,7 +10,7 @@ export interface WidgetProps {
     };
   };
   type: string;
-  onTokenReceived: (token: string, cardType: string) => void;
+  onTokenReceived: ({}) => void;
 }
 
 export const Widget: React.FC<WidgetProps> = ({ widgetStyles, type, onTokenReceived }) => {

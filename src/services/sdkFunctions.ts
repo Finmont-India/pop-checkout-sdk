@@ -3,18 +3,13 @@ import { getConfig } from "../config";
 import { getBaseUrl } from "./FetchBaseUrl";
 
 
-export const initatePayment = async (ref: string, order: any) => {
+export const initatePayment = async ( order: any) => {
   const { env, apiKey } = getConfig();
   const BASE_URL = getBaseUrl(env).paymentUrl
-  const reqOrder = {
-    ...{ ...order, orderPayloadReference: ref },
-    integrationType: "sdk",
-  };
 
   const customHeaders = {
     Authorization: `Bearer ${encodeURIComponent(apiKey)}`,
   };
-
   const headers = {
     ...customHeaders,
   };
@@ -24,7 +19,7 @@ export const initatePayment = async (ref: string, order: any) => {
       method: 'post',
       url: `${BASE_URL}/payments/card?platform=sdk`,
       headers,
-      data: reqOrder,
+      data: order,
     };
 
     const response: AxiosResponse<any> = await axios(requestData);

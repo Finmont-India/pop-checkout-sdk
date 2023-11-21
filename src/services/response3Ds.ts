@@ -14,8 +14,10 @@ export const get3DSResponse = async (recieptReference: string, reference: string
       session3ds: obj3Ds.data.fullData.MD,
     },
     authzReceiptReference: recieptReference,
+    orderPayloadReference: reference,
+    integrationType: "sdk",
   };
-  const result = await initatePayment(reference, payload);
+  const result = await initatePayment(payload);
   return result;
 };
 
