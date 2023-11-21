@@ -24,7 +24,7 @@ export interface CardFormWidgetProps {
 // In CardFormWidget.tsx in your SDK
 export interface CardWidgetProps {
   customStyles?: CardFormWidgetProps;
-  onTokenReceived: (token: string, cardType: string) => void;
+  onTokenReceived: ({}) => void;
 }
 
 const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceived }) => {
@@ -78,17 +78,21 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
       response.then((token) => {
         // Handle the token (e.g., send it to your server for further processing)
         if (token?.success === true) {
-          const receivedToken = token?.data?.data || '';
-          const cardType = token?.data?.cardType || '';
+          const receivedToken = token?.data.key || '';
+          const cardType = token?.data.type || '';
           if (typeof receivedToken === 'string' && typeof cardType === 'string') {
-            onTokenReceived(receivedToken, cardType);
+            const data = {
+              token:receivedToken,
+              type: cardType,
+            }
+            onTokenReceived(data);
             setTokenizationError(null);
           } else {
             // Handle the case where the data or cardType is not a string
             return setTokenizationError('Card verification failed, check the card details.');
           }
         } else {
-          onTokenReceived("", "");
+          onTokenReceived({});
           return setTokenizationError(token?.data.error.error);
         }
       });
@@ -152,12 +156,12 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     const numericValue = newValue.replace(/[^\d]/g, '');
 
     // Limit the input to a maximum of 3 digits
-    if (numericValue.length > 3) {
+    if (numericValue.length > 4) {
       return;
     }
 
     // Check if the numericValue is empty (no digits) and avoid showing an error message
-    const isValid = numericValue === '' || /^\d{3}$/.test(numericValue);
+    const isValid = numericValue === '' || /^\d{3,4}$/.test(numericValue);
 
     setCVV(numericValue);
     setIsCVVValid(isValid);
@@ -182,7 +186,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
       <form>
         <div >
           <label className={`body ${textStyles?.body || ''}`} htmlFor="cardNumber">
-            Card Number
+            Card Number<span style={{ color: 'red' }}> *</span>
           </label>
           <div className={`card-number-input ${cardNumberInput || ''}`}>
             <div className={`card-img ${cardImg || ''}`}>{getCardIconSVG(cardType)}</div>
@@ -201,7 +205,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
         <div className={`input-container ${inputContainer ||''}`}>
           <div className={`date-container ${dateContainer || ''}`} >
           <div className={`input-field`} style={{marginRight:'10px'}}>
-            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationMonth">Month</label>
+            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationMonth">Month<span style={{ color: 'red' }}> *</span></label>
             <div>
               <input
                 type="text"
@@ -216,7 +220,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
  
           </div>
           <div className={`input-field`}>
-            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationYear">Year</label>
+            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationYear">Year<span style={{ color: 'red' }}> *</span></label>
             <div>
               <input
                 type="text"
@@ -232,7 +236,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
           </div>
           </div>
           <div className={`input-field`}>
-            <label className={`body ${textStyles?.body || ''}`} htmlFor="cvv">CVV</label>
+            <label className={`body ${textStyles?.body || ''}`} htmlFor="cvv">CVV<span style={{ color: 'red' }}> *</span></label>
             <div>
               <input
                 type="text"

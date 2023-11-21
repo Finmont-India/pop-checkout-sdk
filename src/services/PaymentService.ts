@@ -35,8 +35,8 @@ export const createCardToken = async (cardData: any) => {
       // @ts-ignore
       {headers}
     );
-
-    return { success: true, data:{ data:response.data.key, cardType: cardData.cardType }};
+    const {data}= response
+    return { success: true, data };
     // @ts-ignore
 } catch (error: any) {
     // Handle errors

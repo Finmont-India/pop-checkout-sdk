@@ -10,16 +10,22 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
   const [iframeUrl, setIframeUrl] = useState(url);
 
 
+
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
+      if (result.data.response3Ds && result.data.response3Ds.url) {
+        setIframeUrl(result.data.response3Ds.url);
+      }
+      else{
       setRes(result);
       onClose();
+      }
     } catch (error) {
-      console.error("Error:", error);
       setRes(error)
     }
-  }, [get3DSResponse]);
+  }, [get3DSResponse])
+
 
   const checkIframeUrl = useCallback((currentIframe) => {
     if (currentIframe) {
@@ -27,7 +33,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
         const query = currentIframe.split('?')[1] || '';
         const paramPairs = query.split('&');
         const params = {};
-
+        setIframeUrl(currentIframe);
         for (const pair of paramPairs) {
           const [key, value] = pair.split('=');
           params[key] = value;
@@ -41,7 +47,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
       }
     }
   }, [url, setRes]);
-
 
   useEffect(() => {
     const handleMessage = (event: any) => {
@@ -74,7 +79,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
         }}
       >
         <div style={{width:"100%", height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-      {iframeUrl !== url ? ( // Display loading spinner while isLoading is true
+      {iframeUrl.includes('/sdkresult') && iframeUrl!== url ? ( // Display loading spinner while isLoading is true
         <SpinnerCircular
           size={40} // Adjust the size as needed
           thickness={70} // Adjust the thickness as needed
