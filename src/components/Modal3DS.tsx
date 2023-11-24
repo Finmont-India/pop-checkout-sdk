@@ -5,7 +5,7 @@ import 'react-responsive-modal/styles.css';
 import { SpinnerCircular } from "spinners-react";
 import styles from './Modal3DS.css'
 
-const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; setRes: any }> = ({ isOpen, onClose, url, setRes }) => {
+const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; onAuthClose: any ; url: string; setRes: any;}> = ({ isOpen, onClose, url, setRes, onAuthClose }) => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [iframeUrl, setIframeUrl] = useState(url);
 
@@ -48,6 +48,10 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
     }
   }, [url, setRes]);
 
+  const onModalClose = ()=>{
+    onAuthClose(true);
+    onClose();
+  }
   useEffect(() => {
     const handleMessage = (event: any) => {
       // Check if the message is from the iframe and if data is a URL
@@ -69,7 +73,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; url: string; se
   return (
     <Modal
         open={isOpen}
-        onClose={onClose}
+        onClose={onModalClose}
         closeOnEsc={false}
         closeOnOverlayClick={false}
         center
