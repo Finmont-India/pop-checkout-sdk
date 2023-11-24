@@ -9,18 +9,19 @@ const App = () => {
 
   const [res, setRes] = useState<any>();
 
-  const [url3ds,] = useState<any>("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=1e67f663-3431-4f7d-b4b4-10cd45daad31");
+  const [url3ds,] = useState<any>("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=e6fb1096-8eb7-431d-842b-444376cc5ae8");
   const key =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiOTMzZjA4NDctMTlhYy00NmYyLTkyMzktMGRiZTFhMDY1NDQ5IiwiZXhwIjoyMDU5NDQxNzQyLCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.p9txS4MeDFfV2sL6WLDxIh39cdyRC9czp0MeOCdFSGyvRjDBFhF1L-Rj4WsCS5MTYumuWJwwZfOg2zTyfsL8AILldC1KiZwIr6ac1TAot3bpyIozLQ87LuozUENbhJvWZLyTnQvthXlIdCtQsyZxXz7CXgL-EjAwcRvXqmgvS0T9pabQLW2s4AmNsJ8Yl2HyQteJY4lV0qnm3n9iexSrWmz2TyLboIaFgMR2BAosmhAprtlgIwPp0jHnF2uTKqpvnzQTGaYpfnzNhYceg4zbpeX9vs8dhg4GoYRfroQrL0THTV95qcnltackdJT09LV2_fM2NKvdBrf5_DDQDY0HIDkNHFgqQ6bKwMK-fay6CFoAP0Wh75TR81qN3o2E9o57tJi_Mh0BHSMkbPgP09FQhLDjkIMncb3kFK_8hqY_jhdSo93OR1U-G5uUXzPixwVny58Xy_D1LUQT404d9ghEQrYEsBjCvT9jbVG19B8gfGxpK2vBeqV8zla7uUBeNriSxpF1H5Km46uNN8yQb1NmW0QPopN4dm8u3npcV9ZFcmuCyJoIfgC9EslHBGMeQf2YE6IQBD26N1L6XNoKYclFFtAJmpK6SNYxS7taB-_tDPTdo5c8MRtpjK1jkAI_im03QZ41S1pWCwpjR1hyp2LurF7ogpkfibDMQ3Zf4UVgiGI";
-  configureSdk(key, "stg");
+    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiY2FhZjljMDAtMmJlMC00OGExLWJjZWItMGY4YzkyMTdkZjdjIiwiZXhwIjoyMDYwMTE2ODY0LCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.nONIY-nWnEnOx9DLtSctEK0ZBYAG6U2xFIyWBuZ3B8hXco8M-fcQTjog2vXmi2YDRR_8TgwzlsfO5QB_ouDCNq3yU6hVRAbzBfQT1Jm0tMD0Qvd2Ntx0yQ5JfhOzxaVPGuA-05CJy_Jt-fI58dMZ90WtTQV9VNJI2IXCtL9WVYyai0SSStzvvtJpT4bbN8etIO2aQzAkethmoT_gDwyhnW8qmtMZifl1sS1y8JhwGIWvRPvqtsp-Bupw--lOuCSt2dRMbk193PE0MN9pGaongCfspNf_IEQmkECXJgjAg3j5ft3EUoGJCNmLMDfAYdOcwMBbk5K_bALBwiUIeDMiVNtU2djm774C_Mv8z392BVqn9MPkAcLEGdlNFMlXgLe3DSFu2mjSuUCK3GL102UrdAEzxEbEk6dfTXLbfHhPlebOz8-s4uJyMzEJXG-wW8g18Uly5fha7o74V87eepwtIK8CseMFXuDIIq50WBM6ljaCUxra8dPNueL8Wg0PA6qEJ5MMCxRL8Zj2g8ZcaNAzk8T1VZc-5J8NowtZii5KXv6ZnyqWfoW1QIAHhNcZPyOB_-dU6s7o_7aCtNoD_f0mNjLi6ww-Vvk7vkd5305vmS4d8nciXzNtk6W2DtHhSzVHIxWM3GcwOIHLI4iUbNgwQb0_nA33IUcDLty_K9n1lgU";
+  configureSdk(key, "dev");
 
   const { Widget, Modal3DS } = useSdk();
-  const [ recievedObj, setRecievedObj] = useState<any>()
+  const [recievedObj, setRecievedObj] = useState<any>()
+  const [flag, setFlag] = useState<boolean>(false);
 
-const onTokenReceived = (data: any)=>{
-  console.log(data);
-  setRecievedObj(data)
-}
+  const onTokenReceived = (data: any) => {
+    console.log(data);
+    setRecievedObj(data)
+  }
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => {
     setIsModalOpen(false);
@@ -38,6 +39,7 @@ const onTokenReceived = (data: any)=>{
     }
   }, [key, callGet3DSResponse, res.reference, res.receiptReference]);
 */
+  console.log(flag);
   return (
     <>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -67,7 +69,7 @@ const onTokenReceived = (data: any)=>{
         {/* Display the token */}
         {console.log(res)}
         <div style={{ display: 'flex', margin: '12px' }}>
-          
+
           <button
             style={{
               padding: '10px',
@@ -90,6 +92,7 @@ const onTokenReceived = (data: any)=>{
           onClose={closeModal}
           url={url3ds}
           setRes={setRes}
+          onAuthClose={setFlag}
         />
       )}
     </>
