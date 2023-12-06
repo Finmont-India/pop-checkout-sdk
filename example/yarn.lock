@@ -1339,6 +1339,18 @@
     "@babel/helper-validator-identifier" "^7.22.20"
     to-fast-properties "^2.0.0"
 
+"@bedrock-layout/use-forwarded-ref@^1.3.1":
+  version "1.6.1"
+  resolved "https://registry.npmjs.org/@bedrock-layout/use-forwarded-ref/-/use-forwarded-ref-1.6.1.tgz#e0d25c35af41ccaa36df809a7de8d5ccd9c70d1e"
+  integrity sha512-GD9A9AFLzFNjr7k6fgerSqxfwDWl+wsPS11PErOKe1zkVz0y7RGC9gzlOiX/JrgpyB3NFHWIuGtoOQqifJQQpw==
+  dependencies:
+    "@bedrock-layout/use-stateful-ref" "^1.4.1"
+
+"@bedrock-layout/use-stateful-ref@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.npmjs.org/@bedrock-layout/use-stateful-ref/-/use-stateful-ref-1.4.1.tgz#c543c61d15885e19506f068618a4d6427a5bf817"
+  integrity sha512-4eKO2KdQEXcR5LI4QcxqlJykJUDQJWDeWYAukIn6sRQYoabcfI5kDl61PUi6FR6o8VFgQ8IEP7HleKqWlSe8SQ==
+
 "@cnakazawa/watch@^1.0.3":
   version "1.0.4"
   resolved "https://registry.npmjs.org/@cnakazawa/watch/-/watch-1.0.4.tgz#f864ae85004d0fcab6f50be9141c4da368d1656a"
@@ -1937,8 +1949,13 @@
     csstype "^3.0.2"
 
 "@types/react@^16":
-  version "0.0.0"
-  uid ""
+  version "16.14.52"
+  resolved "https://registry.npmjs.org/@types/react/-/react-16.14.52.tgz#d6c31c3f69cf6ae10718d0a07a2ef6f2ebafc490"
+  integrity sha512-4+ZN73hgRW3Gang3QMqWjrqPPkf+lWZYiyG4uXtUbpd+7eiBDw6Gemila6rXDd8DorADupTiIERL6Mb5BQTF2w==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
 
 "@types/react@link:../node_modules/@types/react":
   version "0.0.0"
@@ -2905,6 +2922,11 @@ body-parser@1.20.1:
     type-is "~1.6.18"
     unpipe "1.0.0"
 
+body-scroll-lock@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.npmjs.org/body-scroll-lock/-/body-scroll-lock-3.1.5.tgz#c1392d9217ed2c3e237fee1e910f6cdd80b7aaec"
+  integrity sha512-Yi1Xaml0EvNA0OYWxXiYNqY24AfWkbA6w5vxE7GWxtKfzIbZM+Qw+aSmkgsbWzbHiy/RCSkUZBplVxTA+E4jJg==
+
 bonjour@^3.5.0:
   version "3.5.0"
   resolved "https://registry.npmjs.org/bonjour/-/bonjour-3.5.0.tgz#8e890a183d8ee9a2393b3844c691a42bcf7bc9f5"
@@ -3384,6 +3406,11 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
+classnames@^2.3.1:
+  version "2.3.2"
+  resolved "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz#351d813bf0137fcc6a76a16b88208d2560a0d924"
+  integrity sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==
+
 clean-css@^4.2.3:
   version "4.2.4"
   resolved "https://registry.npmjs.org/clean-css/-/clean-css-4.2.4.tgz#733bf46eba4e607c6891ea57c24a989356831178"
@@ -3747,6 +3774,11 @@ create-hmac@^1.1.0, create-hmac@^1.1.4, create-hmac@^1.1.7:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+credit-card-type@^10.0.0:
+  version "10.0.0"
+  resolved "https://registry.npmjs.org/credit-card-type/-/credit-card-type-10.0.0.tgz#f3b24df51c4e4659c49a46e9adf888e1710c6131"
+  integrity sha512-X09zdwnZd75Ne+YFZywuga4pa6Bd+ME90h8C8fQofL9O0MlRHLEb2fgwDQ9at8SGvSY2DYrLKRoTaW9zK0jAxQ==
 
 cross-spawn@7.0.1:
   version "7.0.1"
@@ -9675,6 +9707,15 @@ react-native-payment-icons@^1.0.11:
   version "1.0.11"
   resolved "https://registry.npmjs.org/react-native-payment-icons/-/react-native-payment-icons-1.0.11.tgz#bffc0ec68c2af1061cd222765303c2a61955371e"
   integrity sha512-HY/g704+J25tLtjNfsQBiYF8OLtbPSaLN4ZY3quSJahRD+Zo1d8rd1cszeXSRb7WJYBNRJ2VDhH8mk2yhVByNQ==
+
+react-responsive-modal@^6.4.2:
+  version "6.4.2"
+  resolved "https://registry.npmjs.org/react-responsive-modal/-/react-responsive-modal-6.4.2.tgz#666b5c35b232cec617981006c9fe59414531a5a0"
+  integrity sha512-ARjGEKE5Gu5CSvyA8U9ARVbtK4SMAtdXsjtzwtxRlQIHC99RQTnOUctLpl7+/sp1Kg1OJZ6yqvp6ivd4TBueEw==
+  dependencies:
+    "@bedrock-layout/use-forwarded-ref" "^1.3.1"
+    body-scroll-lock "^3.1.5"
+    classnames "^2.3.1"
 
 "react-scripts@link:../node_modules/react-scripts":
   version "0.0.0"
