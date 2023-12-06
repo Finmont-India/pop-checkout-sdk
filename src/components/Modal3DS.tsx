@@ -5,8 +5,9 @@ import 'react-responsive-modal/styles.css';
 import { SpinnerCircular } from "spinners-react";
 import styles from './Modal3DS.css'
 
-const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; onAuthClose: any ; url: string; setRes: any;}> = ({ isOpen, onClose, url, setRes, onAuthClose }) => {
+const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void; onAuthClose: any; url: string; setRes: any; }> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
+  const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
 
 
@@ -14,12 +15,13 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; onAuthClose: an
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
+      setFlag(result.data.response3Ds?.isHidden)
       if (result.data.response3Ds && result.data.response3Ds.url) {
         setIframeUrl(result.data.response3Ds.url);
       }
-      else{
-      setRes(result);
-      onClose();
+      else {
+        setRes(result);
+        onClose();
       }
     } catch (error) {
       setRes(error)
@@ -48,7 +50,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; onAuthClose: an
     }
   }, [url, setRes]);
 
-  const onModalClose = ()=>{
+  const onModalClose = () => {
     onAuthClose(true);
     onClose();
   }
@@ -72,38 +74,66 @@ const Modal3DS: React.FC<{ isOpen: boolean; onClose: () => void; onAuthClose: an
 
   return (
     <Modal
-        open={isOpen}
-        onClose={onModalClose}
-        closeOnEsc={false}
-        closeOnOverlayClick={false}
-        center
-        classNames={{
-          overlay: styles.customOverlay,
-          modal: styles.customModal,
-        }}
-      >
-        <div style={{width:"100%", height:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-      {iframeUrl.includes('/sdkresult') && iframeUrl!== url ? ( // Display loading spinner while isLoading is true
-        <SpinnerCircular
-          size={40} // Adjust the size as needed
-          thickness={70} // Adjust the thickness as needed
-          speed={50} // Adjust the speed as needed
-        />
-      ) : (
-        <iframe
-          title="Form"
-          ref={iframeRef}
-          src={iframeUrl}
-          id="myIframe"
-          style={{
-            pointerEvents: "auto",
-            border: "none",
-            width: "90%",
-            height: "100%",
-            outline: "none",
-          }}
-        />
-      )}
+      open={isOpen}
+      onClose={onModalClose}
+      closeOnEsc={false}
+      closeOnOverlayClick={false}
+      center
+      classNames={{
+        overlay: styles.customOverlay,
+        modal: styles.customModal,
+      }}
+    >
+      <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        {!flag ? (
+          <div style={{ width: "100%", height: "100%" }}>
+            {iframeUrl.includes('/sdkresult') && iframeUrl !== url ? (
+              <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <SpinnerCircular
+                  size={40}
+                  thickness={70}
+                  speed={50}
+                />
+              </div>
+            ) : (
+              <iframe
+                title="Form"
+                ref={iframeRef}
+                src={iframeUrl}
+                id="myIframe"
+                style={{
+                  pointerEvents: "auto",
+                  border: "none",
+                  width: "100%",
+                  height: "100%",
+                  outline: "none",
+                }}
+              />
+            )}
+          </div>
+        ) : (
+          <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <SpinnerCircular
+              size={40}
+              thickness={70}
+              speed={50}
+            />
+            <iframe
+              title="Form"
+              ref={iframeRef}
+              src={iframeUrl}
+              id="myIframe"
+              style={{
+                display: "none",
+                pointerEvents: "none",
+                border: "none",
+                width: "100%",
+                height: "100%",
+                outline: "none",
+              }}
+            />
+          </div>
+        )}
       </div>
     </Modal>
   );

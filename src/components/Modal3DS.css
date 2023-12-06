@@ -5,7 +5,7 @@
   /* Default styles for the modal content */
 .customModal {
     width: 50%;
-    height: 60%;
+    height: 70%;
     max-height: 80%; /* Fix the maximum height to 80% of the viewport height */
     overflow-y: hidden; /* Add vertical scroll if content exceeds the height */
     overflow-x: hidden;
