@@ -12,10 +12,10 @@ const App = () => {
   const [url3ds,] = useState<any>("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=9fa6a254-be66-4cd9-b465-12ee8dd80c85");
   const isHidden:boolean= false;
   const key =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiY2FhZjljMDAtMmJlMC00OGExLWJjZWItMGY4YzkyMTdkZjdjIiwiZXhwIjoyMDYwMTE2ODY0LCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.nONIY-nWnEnOx9DLtSctEK0ZBYAG6U2xFIyWBuZ3B8hXco8M-fcQTjog2vXmi2YDRR_8TgwzlsfO5QB_ouDCNq3yU6hVRAbzBfQT1Jm0tMD0Qvd2Ntx0yQ5JfhOzxaVPGuA-05CJy_Jt-fI58dMZ90WtTQV9VNJI2IXCtL9WVYyai0SSStzvvtJpT4bbN8etIO2aQzAkethmoT_gDwyhnW8qmtMZifl1sS1y8JhwGIWvRPvqtsp-Bupw--lOuCSt2dRMbk193PE0MN9pGaongCfspNf_IEQmkECXJgjAg3j5ft3EUoGJCNmLMDfAYdOcwMBbk5K_bALBwiUIeDMiVNtU2djm774C_Mv8z392BVqn9MPkAcLEGdlNFMlXgLe3DSFu2mjSuUCK3GL102UrdAEzxEbEk6dfTXLbfHhPlebOz8-s4uJyMzEJXG-wW8g18Uly5fha7o74V87eepwtIK8CseMFXuDIIq50WBM6ljaCUxra8dPNueL8Wg0PA6qEJ5MMCxRL8Zj2g8ZcaNAzk8T1VZc-5J8NowtZii5KXv6ZnyqWfoW1QIAHhNcZPyOB_-dU6s7o_7aCtNoD_f0mNjLi6ww-Vvk7vkd5305vmS4d8nciXzNtk6W2DtHhSzVHIxWM3GcwOIHLI4iUbNgwQb0_nA33IUcDLty_K9n1lgU";
+    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiNGI3MDQ0NzUtNGM5Zi00ODI0LWE0OTAtNDM1ZDgyZTFmNzk2IiwiZXhwIjoyMDYxODU3MzY3LCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.eyVDm6YMtq5ytvf3nTqc_qRxdFTY2AphU1KuD_ymZkAMNCWBSMPeBILPmoztpFsARpZyXJ61F-eoFVREs682LwkwEopzuGsQ-9KuPvJDxa-iPwsCaoB35mHt9UOGf0nd63z8_Ubg5a4Y9jqoyeqZn_tBCIaZAoEENe8jVGEaWFsZl2JaCpuJIGA-SRVGAabTNR_vo5F-QqsQRn7v-AxxAtCKHYC0LC-L8vVrVB1whHKQXagKonBSIQZuK1Gfm7hRaU_hrTBKblIZY82LUy3n3jA2WZtiB3hWZl_AUpKGxL8bJbi-KcdhxW4BwXscKsnhwqEF6k-McuoeOeC0mnAMmODxYYzP3t4xSHHEsD7soFXCmJNYWVSCDEYGUEFgLS-y9_Z5I6o2loUxaH4rikDyEub7sh-vP7hTyIE0UupeJNgBq2vqPeRvy2znbMjplCZ86gYtTwVWnU1PqaWRFfvSz4SZQ9B6kd2fXJjUTOXHHUV94YO2lRj7gkg9T0-Wpe_4HNI84tnheoqbtyxVkJ7-lC2O3NhBR4IFIvLscZtsCqq_i9qwMiaP3yHj_fBMMP5YMVd1g3FaXnkKSOEVNdgIaM4GSqAzGEhLAHMc0pHgAQm4kTqt0Gquzh4bfafg6tvMjJX6BbS0LSX_NH_oqA_Du1DdXfKyNF1hppUe-iDteus";
   configureSdk(key, "dev");
 
-  const { Widget, Modal3DS } = useSdk();
+  const { Widget, Modal3DS, getInfo } = useSdk();
   const [recievedObj, setRecievedObj] = useState<any>()
   const [flag, setFlag] = useState<boolean>(false);
 
@@ -32,6 +32,21 @@ const App = () => {
     setIsModalOpen(true);
 
   }
+  
+  async function fetchData() {
+    try {
+      const data = await getInfo();
+      console.log('Data:', data);
+      // Process the data as needed
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle errors
+    }
+  }
+  
+  // Call the fetchData function
+  console.log(fetchData());
+  console.log(getInfo())
   console.log(recievedObj);
   /*useEffect(() => {
     // Configure the SDK with your API key and environment (e.g., "dev")
