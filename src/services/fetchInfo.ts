@@ -9,20 +9,21 @@ interface PositionCoordinates {
 };
 
 const getCoordinates = (): Promise<PositionCoordinates | undefined> => {
-  return new Promise((resolve, reject) => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          resolve(position.coords);
-        },
-        (error) => {
-          console.error('Geolocation error:', error);
-          resolve(undefined); // Resolving with undefined in case of error
-        }
-      );
-    } else {
-      reject(new Error('Geolocation not supported'));
-    }
+navigator.geolocation.getCurrentPosition((position)=>console.log(position));
+  return new Promise((resolve) => {
+    fetch('http://ip-api.com/json/')
+      .then(response => response.json())
+      .then(data => {
+        const coords: PositionCoordinates = {
+          latitude: data.lat,
+          longitude: data.lon,
+        };
+        resolve(coords);
+      })
+      .catch(error => {
+        console.error('IP Geolocation error:', error);
+        resolve(undefined); // Resolving with undefined if IP-based geolocation fails
+      });
   });
 };
 
@@ -93,7 +94,7 @@ export async function getBrowserInfo(): Promise<any> {
   let ipData: string = '0.0.0.0';
   const ipInfo = await getBrowserAPI();
   if (ipInfo) {
-    ipData = ipInfo.data.ip;
+    ipData = "2405:201:a41e:11:8957:7e72:f091:c9c";
   }
   const browser = Bowser.getParser(window.navigator.userAgent);
   return {

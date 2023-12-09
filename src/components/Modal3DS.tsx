@@ -73,7 +73,26 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
   }, [iframeRef]);
 
   return (
-    <Modal
+    <div>
+      {flag?
+      (
+        <iframe
+              title="Form"
+              ref={iframeRef}
+              src={iframeUrl}
+              id="myIframe"
+              style={{
+                display: "none",
+                pointerEvents: "none",
+                border: "none",
+                width: "100%",
+                height: "100%",
+                outline: "none",
+              }}
+            />
+      ):
+      (
+        <Modal
       open={isOpen}
       onClose={onModalClose}
       closeOnEsc={false}
@@ -85,7 +104,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
       }}
     >
       <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-        {!flag ? (
           <div style={{ width: "100%", height: "100%" }}>
             {iframeUrl.includes('/sdkresult') && iframeUrl !== url ? (
               <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
@@ -111,31 +129,11 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
               />
             )}
           </div>
-        ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <SpinnerCircular
-              size={40}
-              thickness={70}
-              speed={50}
-            />
-            <iframe
-              title="Form"
-              ref={iframeRef}
-              src={iframeUrl}
-              id="myIframe"
-              style={{
-                display: "none",
-                pointerEvents: "none",
-                border: "none",
-                width: "100%",
-                height: "100%",
-                outline: "none",
-              }}
-            />
-          </div>
-        )}
       </div>
     </Modal>
+      )}
+    
+    </div>
   );
 };
 

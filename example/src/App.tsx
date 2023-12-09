@@ -9,11 +9,11 @@ const App = () => {
 
   const [res, setRes] = useState<any>();
 
-  const [url3ds,] = useState<any>("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=9fa6a254-be66-4cd9-b465-12ee8dd80c85");
-  const isHidden:boolean= false;
+  const [url3ds,] = useState<any>("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=c6408fe6-2ccf-47fd-9e15-10b540817c5c");
+  const isHidden:boolean= true;
   const key =
-    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiNGI3MDQ0NzUtNGM5Zi00ODI0LWE0OTAtNDM1ZDgyZTFmNzk2IiwiZXhwIjoyMDYxODU3MzY3LCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.eyVDm6YMtq5ytvf3nTqc_qRxdFTY2AphU1KuD_ymZkAMNCWBSMPeBILPmoztpFsARpZyXJ61F-eoFVREs682LwkwEopzuGsQ-9KuPvJDxa-iPwsCaoB35mHt9UOGf0nd63z8_Ubg5a4Y9jqoyeqZn_tBCIaZAoEENe8jVGEaWFsZl2JaCpuJIGA-SRVGAabTNR_vo5F-QqsQRn7v-AxxAtCKHYC0LC-L8vVrVB1whHKQXagKonBSIQZuK1Gfm7hRaU_hrTBKblIZY82LUy3n3jA2WZtiB3hWZl_AUpKGxL8bJbi-KcdhxW4BwXscKsnhwqEF6k-McuoeOeC0mnAMmODxYYzP3t4xSHHEsD7soFXCmJNYWVSCDEYGUEFgLS-y9_Z5I6o2loUxaH4rikDyEub7sh-vP7hTyIE0UupeJNgBq2vqPeRvy2znbMjplCZ86gYtTwVWnU1PqaWRFfvSz4SZQ9B6kd2fXJjUTOXHHUV94YO2lRj7gkg9T0-Wpe_4HNI84tnheoqbtyxVkJ7-lC2O3NhBR4IFIvLscZtsCqq_i9qwMiaP3yHj_fBMMP5YMVd1g3FaXnkKSOEVNdgIaM4GSqAzGEhLAHMc0pHgAQm4kTqt0Gquzh4bfafg6tvMjJX6BbS0LSX_NH_oqA_Du1DdXfKyNF1hppUe-iDteus";
-  configureSdk(key, "dev");
+    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6InNkayIsIm1lcmNoYW50UmVmZXJlbmNlIjoiOTMzZjA4NDctMTlhYy00NmYyLTkyMzktMGRiZTFhMDY1NDQ5IiwiZXhwIjoyMDU5NDQxNzQyLCJpc3MiOiJhcGktdG9rZW4tc2VydmljZSJ9.p9txS4MeDFfV2sL6WLDxIh39cdyRC9czp0MeOCdFSGyvRjDBFhF1L-Rj4WsCS5MTYumuWJwwZfOg2zTyfsL8AILldC1KiZwIr6ac1TAot3bpyIozLQ87LuozUENbhJvWZLyTnQvthXlIdCtQsyZxXz7CXgL-EjAwcRvXqmgvS0T9pabQLW2s4AmNsJ8Yl2HyQteJY4lV0qnm3n9iexSrWmz2TyLboIaFgMR2BAosmhAprtlgIwPp0jHnF2uTKqpvnzQTGaYpfnzNhYceg4zbpeX9vs8dhg4GoYRfroQrL0THTV95qcnltackdJT09LV2_fM2NKvdBrf5_DDQDY0HIDkNHFgqQ6bKwMK-fay6CFoAP0Wh75TR81qN3o2E9o57tJi_Mh0BHSMkbPgP09FQhLDjkIMncb3kFK_8hqY_jhdSo93OR1U-G5uUXzPixwVny58Xy_D1LUQT404d9ghEQrYEsBjCvT9jbVG19B8gfGxpK2vBeqV8zla7uUBeNriSxpF1H5Km46uNN8yQb1NmW0QPopN4dm8u3npcV9ZFcmuCyJoIfgC9EslHBGMeQf2YE6IQBD26N1L6XNoKYclFFtAJmpK6SNYxS7taB-_tDPTdo5c8MRtpjK1jkAI_im03QZ41S1pWCwpjR1hyp2LurF7ogpkfibDMQ3Zf4UVgiGI";
+  configureSdk(key, "stg");
 
   const { Widget, Modal3DS, getInfo } = useSdk();
   const [recievedObj, setRecievedObj] = useState<any>()
