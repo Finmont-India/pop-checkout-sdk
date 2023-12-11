@@ -110,15 +110,11 @@ const createBrowserAPISingleton = () => {
 
 export const getBrowserAPI = createBrowserAPISingleton();
 
-let isBrowserInfoFetched = false;
-let browserInfoPromise: Promise<any> | null = null;
-
-const fetchBrowserInfoOnce = async (): Promise<any> => {
-  if (!isBrowserInfoFetched) {
+const getBrowserInfo = async (): Promise<any> => {
     let ipData: string = '0.0.0.0';
     const ipInfo = await getBrowserAPI();
     if (ipInfo) {
-      ipData = "2405:201:a41e:11:8957:7e72:f091:c9c";
+      ipData = ipInfo.data.ip;
     }
     const browser = Bowser.getParser(window.navigator.userAgent);
     const browserInfo = {
@@ -136,13 +132,9 @@ const fetchBrowserInfoOnce = async (): Promise<any> => {
       name: browser.getBrowserName(),
       version: browser.getBrowserVersion(),
     };
-    isBrowserInfoFetched = true;
     return browserInfo;
-  }
-  return browserInfoPromise!;
 };
 
-export const getBrowserInfo = fetchBrowserInfoOnce;
 
 export function getMachineInfo(): any {
   const browser = Bowser.getParser(window.navigator.userAgent);

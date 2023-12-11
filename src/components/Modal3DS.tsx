@@ -76,8 +76,17 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
     <div>
       {flag ?
         (
-          <div>
-            <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',}}>
+            <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center",  }}>
               <SpinnerCircular
                 size={40}
                 thickness={80}
