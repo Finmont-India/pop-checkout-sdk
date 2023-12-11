@@ -10,129 +10,118 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
   const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
 
-
-
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
-      setFlag(result.data.response3Ds?.isHidden)
+      setFlag(result.data.response3Ds?.isHidden);
       if (result.data.response3Ds && result.data.response3Ds.url) {
         setIframeUrl(result.data.response3Ds.url);
-      }
-      else {
+      } else {
         setRes(result);
         onClose();
       }
     } catch (error) {
-      setRes(error)
+      setRes(error);
     }
-  }, [get3DSResponse])
+  }, [get3DSResponse, setRes, onClose]);
 
+  const checkIframeUrl = useCallback((currentIframe: string) => {
+    if (currentIframe !== url) {
+      const query = currentIframe.split('?')[1] || '';
+      const paramPairs = query.split('&');
+      const params = {};
+      setIframeUrl(currentIframe);
+      for (const pair of paramPairs) {
+        const [key, value] = pair.split('=');
+        params[key] = value;
+      }
 
-  const checkIframeUrl = useCallback((currentIframe) => {
-    if (currentIframe) {
-      if (currentIframe && currentIframe !== url) {
-        const query = currentIframe.split('?')[1] || '';
-        const paramPairs = query.split('&');
-        const params = {};
-        setIframeUrl(currentIframe);
-        for (const pair of paramPairs) {
-          const [key, value] = pair.split('=');
-          params[key] = value;
-        }
-
-        const reference = params['reference'];
-        const receiptReference = params['receiptReference'];
-        if (receiptReference && reference) {
-          callGet3DSResponse(receiptReference, reference);
-        }
+      const reference = params['reference'];
+      const receiptReference = params['receiptReference'];
+      if (receiptReference && reference) {
+        callGet3DSResponse(receiptReference, reference);
       }
     }
-  }, [url, setRes]);
+  }, [url, callGet3DSResponse]);
 
   const onModalClose = () => {
     onAuthClose(true);
     onClose();
   }
+
   useEffect(() => {
-    const handleMessage = (event: any) => {
-      // Check if the message is from the iframe and if data is a URL
+    const handleMessage = (event: MessageEvent) => {
       if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
-        // Handle the URL received from the iframe
         setIframeUrl('');
         checkIframeUrl(event.data);
       }
     };
 
-    // Add an event listener to listen for messages
     window.addEventListener('message', handleMessage);
 
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [iframeRef]);
+  }, [iframeRef, checkIframeUrl]);
 
   return (
     <div>
-      {flag?
-      (
+      {flag ? (
         <iframe
-              title="Form"
-              ref={iframeRef}
-              src={iframeUrl}
-              id="myIframe"
-              style={{
-                display: "none",
-                pointerEvents: "none",
-                border: "none",
-                width: "100%",
-                height: "100%",
-                outline: "none",
-              }}
-            />
-      ):
-      (
+          title="Form"
+          ref={iframeRef}
+          src={iframeUrl}
+          id="myIframe"
+          style={{
+            display: "none",
+            pointerEvents: "none",
+            border: "none",
+            width: "100%",
+            height: "100%",
+            outline: "none",
+          }}
+        />
+      ) : (
         <Modal
-      open={isOpen}
-      onClose={onModalClose}
-      closeOnEsc={false}
-      closeOnOverlayClick={false}
-      center
-      classNames={{
-        overlay: styles.customOverlay,
-        modal: styles.customModal,
-      }}
-    >
-      <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-          <div style={{ width: "100%", height: "100%" }}>
-            {iframeUrl.includes('/sdkresult') && iframeUrl !== url ? (
-              <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <SpinnerCircular
-                  size={40}
-                  thickness={70}
-                  speed={50}
+          open={isOpen}
+          onClose={onModalClose}
+          closeOnEsc={false}
+          closeOnOverlayClick={false}
+          center
+          classNames={{
+            overlay: styles.customOverlay,
+            modal: styles.customModal,
+          }}
+        >
+          <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div style={{ width: "100%", height: "100%" }}>
+              {iframeUrl.includes('/sdkresult') && iframeUrl !== url ? (
+                <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <SpinnerCircular
+                    size={40}
+                    thickness={70}
+                    speed={50}
+                  />
+                </div>
+              ) : (
+                <iframe
+                  title="Form"
+                  ref={iframeRef}
+                  src={iframeUrl}
+                  id="myIframe"
+                  style={{
+                    pointerEvents: "auto",
+                    border: "none",
+                    width: "100%",
+                    height: "100%",
+                    outline: "none",
+                  }}
                 />
-              </div>
-            ) : (
-              <iframe
-                title="Form"
-                ref={iframeRef}
-                src={iframeUrl}
-                id="myIframe"
-                style={{
-                  pointerEvents: "auto",
-                  border: "none",
-                  width: "100%",
-                  height: "100%",
-                  outline: "none",
-                }}
-              />
-            )}
+              )}
+            </div>
           </div>
-      </div>
-    </Modal>
+        </Modal>
       )}
-    
     </div>
   );
 };
