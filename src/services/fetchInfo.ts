@@ -7,31 +7,40 @@ interface PositionCoordinates {
   latitude: number;
   longitude: number;
 };
-
 const getCoordinates = (): Promise<PositionCoordinates | undefined> => {
-navigator.geolocation.getCurrentPosition((position)=>console.log(position));
   return new Promise((resolve) => {
-    fetch('http://ip-api.com/json/')
-      .then(response => response.json())
-      .then(data => {
-        const coords: PositionCoordinates = {
-          latitude: data.lat,
-          longitude: data.lon,
-        };
-        resolve(coords);
-      })
-      .catch(error => {
-        console.error('IP Geolocation error:', error);
-        resolve(undefined); // Resolving with undefined if IP-based geolocation fails
-      });
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        resolve({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      },
+      (error) => {
+        console.error('Geolocation error:', error);
+        resolve(undefined); // Resolving with undefined if geolocation fails
+      }
+    );
   });
+};
+
+let isCoordinatesFetched = false;
+let coordinatesPromise: Promise<PositionCoordinates | undefined> | null = null;
+
+const fetchCoordinatesOnce = (): Promise<PositionCoordinates | undefined> => {
+  if (!isCoordinatesFetched) {
+    coordinatesPromise = getCoordinates();
+    isCoordinatesFetched = true;
+  }
+  return coordinatesPromise!;
 };
 
 export const getInfo = async () => {
   try {
     const response = await getBrowserInfo();
     const mach = await getMachineInfo();
-    const coordinates = await getCoordinates();
+    const coordinates = await fetchCoordinatesOnce();
     const data = {
       browserInfo: {
         userAgent: response.userAgent,
@@ -63,56 +72,77 @@ export const getInfo = async () => {
   }
 }
 
-export const getBrowserAPI = async (): Promise<any> => {
+const createBrowserAPISingleton = () => {
+  let isApiFetched = false;
+  let apiPromise: Promise<any> | null = null;
 
-  const { env, apiKey } = getConfig();
-  const urlObj = getBaseUrl(env);
-  const BASE_URL = urlObj.paymentUrl;
+  const fetchApiOnce = async (): Promise<any> => {
+    if (!isApiFetched) {
+      const { env, apiKey } = getConfig();
+      const urlObj = getBaseUrl(env);
+      const BASE_URL = urlObj.paymentUrl;
 
-  const customHeaders: RawAxiosRequestHeaders = {
-    "Authorization": `Bearer ${encodeURIComponent(apiKey)}`,
+      const customHeaders: RawAxiosRequestHeaders = {
+        "Authorization": `Bearer ${encodeURIComponent(apiKey)}`,
+      };
+
+      const headers: RawAxiosRequestHeaders = {
+        ...customHeaders,
+      };
+
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/browser-ip?platform=sdk`,
+          // @ts-ignore
+          { headers }
+        );
+        isApiFetched = true;
+        return { data: response.data };
+      } catch (error) {
+        return { error: error?.response?.data?.error || error?.message };
+      }
+    }
+    return apiPromise!;
   };
 
-  const headers: RawAxiosRequestHeaders = {
-    ...customHeaders,
-  };
-  let response;
-  try {
-    response = await axios.get(
-      `${BASE_URL}/browser-ip?platform=sdk`,
-      // @ts-ignore
-      { headers }
-    );
-    return { data: response.data };
-  } catch (error) {
-    return { error: error?.response?.data?.error || error?.message };
-  }
+  return fetchApiOnce;
 };
 
+export const getBrowserAPI = createBrowserAPISingleton();
 
-export async function getBrowserInfo(): Promise<any> {
-  let ipData: string = '0.0.0.0';
-  const ipInfo = await getBrowserAPI();
-  if (ipInfo) {
-    ipData = "2405:201:a41e:11:8957:7e72:f091:c9c";
+let isBrowserInfoFetched = false;
+let browserInfoPromise: Promise<any> | null = null;
+
+const fetchBrowserInfoOnce = async (): Promise<any> => {
+  if (!isBrowserInfoFetched) {
+    let ipData: string = '0.0.0.0';
+    const ipInfo = await getBrowserAPI();
+    if (ipInfo) {
+      ipData = "2405:201:a41e:11:8957:7e72:f091:c9c";
+    }
+    const browser = Bowser.getParser(window.navigator.userAgent);
+    const browserInfo = {
+      userAgent: window.navigator.userAgent,
+      screenHeight: window.screen.height,
+      screenWidth: window.screen.width,
+      colorDepth: window.screen.pixelDepth,
+      acceptHeader:
+        'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+      timezoneOffset: new Date().getTimezoneOffset(),
+      language: window.navigator.language,
+      javaEnabled: window.navigator.javaEnabled(),
+      jsEnabled: true,
+      ip: ipData,
+      name: browser.getBrowserName(),
+      version: browser.getBrowserVersion(),
+    };
+    isBrowserInfoFetched = true;
+    return browserInfo;
   }
-  const browser = Bowser.getParser(window.navigator.userAgent);
-  return {
-    userAgent: window.navigator.userAgent,
-    screenHeight: window.screen.height,
-    screenWidth: window.screen.width,
-    colorDepth: window.screen.pixelDepth,
-    acceptHeader:
-      'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
-    timezoneOffset: new Date().getTimezoneOffset(),
-    language: window.navigator.language,
-    javaEnabled: window.navigator.javaEnabled(),
-    jsEnabled: true,
-    ip: ipData,
-    name: browser.getBrowserName(),
-    version: browser.getBrowserVersion(),
-  };
-}
+  return browserInfoPromise!;
+};
+
+export const getBrowserInfo = fetchBrowserInfoOnce;
 
 export function getMachineInfo(): any {
   const browser = Bowser.getParser(window.navigator.userAgent);
