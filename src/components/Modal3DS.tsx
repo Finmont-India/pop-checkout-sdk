@@ -76,25 +76,14 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
     <div>
       {flag ?
         (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex:1000
-            }}>
-            <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
+          <div >
+            {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
               <SpinnerCircular
                 size={40}
                 thickness={80}
                 speed={50}
               />
-            </div>
+            </div> */}
             <iframe
               title="Form"
               ref={iframeRef}
@@ -103,10 +92,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
               style={{
                 display: "none",
                 pointerEvents: "none",
-                border: "none",
-                width: "100%",
-                height: "100%",
-                outline: "none",
               }}
             />
           </div>
