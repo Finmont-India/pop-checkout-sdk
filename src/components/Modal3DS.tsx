@@ -13,12 +13,19 @@ const Modal3DS: React.FC<{
   url: string;
   setRes: any;
 }> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
+  const isMounted = useRef<boolean>(true);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [ref, setRef] = useState<string>('');
   const [recRef, setRecRef] = useState<string>('');
+
+  useEffect(() => {
+    return () => {
+      isMounted.current = false; // Set isMounted to false on unmount
+    };
+  }, []);
 
 
   const callGet3DSResponse = useCallback(async (
@@ -29,6 +36,9 @@ const Modal3DS: React.FC<{
       const result = await get3DSResponse(receiptRef, ref);
       setRecRef('');
       setRef('');
+      if (isMounted.current) { 
+
+        setIsLoading(false);
       if (
         result.data?.response3Ds && result.data.response3Ds?.url
       ) {
@@ -36,11 +46,11 @@ const Modal3DS: React.FC<{
         setFlag(result.data.response3Ds?.isHidden);
       } else {
         setRes(result);
-        setIsLoading(false);
         onClose();
       }
+    }
     } catch (error) {
-      setRes(error);
+      console.log(error);
       setIsLoading(false);
       onClose();
     }

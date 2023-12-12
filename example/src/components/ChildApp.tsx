@@ -20,7 +20,6 @@ const ChildApp: React.FC<{
       <div style={{ width: '300px', height: '500px' }}>
         {/* Other components or logic you may have */}
         {isModalOpen && url !== null && isAuth !== null && (
-    
           <Modal3DS
             isOpen={isOpen}
             onClose={onClose}
