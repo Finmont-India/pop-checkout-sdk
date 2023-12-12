@@ -90,7 +90,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             left: 0,
             width: '100vw',
             height: '100vh',
-            backgroundColor: 'lightgray',
+            backgroundColor: 'rgba(255, 255, 255, 0.7)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
