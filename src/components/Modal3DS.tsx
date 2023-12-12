@@ -16,18 +16,18 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
+      console.log(result);
       if (result.data.response3Ds && result.data.response3Ds.url) {
         setIframeUrl(result.data.response3Ds.url);
-        setIsLoading(false);
-      setFlag(result.data.response3Ds?.isHidden)
-      }
-      else {
+        setFlag(result.data.response3Ds?.isHidden);
+      } else {
         setRes(result);
-        setIsLoading(false);
         onClose();
       }
     } catch (error) {
-      setRes(error)
+      setRes(error);
+    } finally {
+      setIsLoading(false); // Ensure loading state is set to false in both success and error scenarios
     }
   }, [get3DSResponse])
 
@@ -57,6 +57,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
     onAuthClose(true);
     onClose();
   }
+  console.log("isLoading",isLoading);
   useEffect(() => {
     const handleMessage = (event: any) => {
       // Check if the message is from the iframe and if data is a URL
@@ -69,7 +70,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
 
     // Add an event listener to listen for messages
     window.addEventListener('message', handleMessage);
-
+ 
     return () => {
       window.removeEventListener('message', handleMessage);
     };
@@ -88,8 +89,8 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             position: 'absolute',
             top: 0,
             left: 0,
-            width: '100vw',
-            height: '100vh',
+            width: '100%',
+            height: '100%',
             backgroundColor: 'rgba(255, 255, 255, 0.7)',
             display: 'flex',
             justifyContent: 'center',

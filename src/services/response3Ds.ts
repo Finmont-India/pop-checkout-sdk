@@ -4,21 +4,40 @@ import { getBaseUrl } from "./FetchBaseUrl";
 import { get3DSObject, getCachedRequest } from "./ResponseUtility";
 import { initatePayment } from "./sdkFunctions";
 
-export const get3DSResponse = async (recieptReference: string, reference: string) => {
-  const response = await getCachedRequest(reference);
-  const obj3Ds = await get3DSObject(recieptReference);
-  const payload = {
-    order: response.data.paymentSessionData.order,
-    threeDSRequestData: {
-      issuer3dsResp: obj3Ds.data.fullData.PaRes,
-      session3ds: obj3Ds.data.fullData.MD,
-    },
-    authzReceiptReference: recieptReference,
-    orderPayloadReference: reference,
-    integrationType: "sdk",
-  };
-  const result = await initatePayment(payload);
-  return result;
+export const get3DSResponse = async (receiptReference: string, reference: string) => {
+  try {
+    const response = await getCachedRequest(reference);
+    console.log(response);
+
+    if (response.data.paymentSessionData) {
+      const obj3Ds = await get3DSObject(receiptReference);
+
+      if (obj3Ds.data.fullData) {
+        const payload = {
+          order: response.data.paymentSessionData.order,
+          threeDSRequestData: {
+            issuer3dsResp: obj3Ds.data.fullData.PaRes,
+            session3ds: obj3Ds.data.fullData.MD,
+          },
+          authzReceiptReference: receiptReference,
+          orderPayloadReference: reference,
+          integrationType: "sdk",
+        };
+        const result = await initatePayment(payload);
+        return result;
+      } else {
+        // Return an appropriate error message or handle the error case
+        return obj3Ds.data.error || "Missing fullData in 3DS response";
+      }
+    } else {
+      // Return an appropriate error message or handle the error case
+      return response.data.error || "Missing paymentSessionData in cached request";
+    }
+  } catch (error) {
+    // Handle any uncaught errors here or log them
+    console.error("Error in get3DSResponse:", error);
+    return "An error occurred while processing the 3DS response";
+  }
 };
 
 export const getPaymentResponse = async (recieptReference: string, apiKey: string, env: string) => {
