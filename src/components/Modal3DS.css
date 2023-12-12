@@ -31,11 +31,11 @@
 /* Modal3DS.css */
 
 .spinnerContainer {
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 9999;
+  z-index: 1001;
   display: flex;
   justify-content: center;
   align-items: center;

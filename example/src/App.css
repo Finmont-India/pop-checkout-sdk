@@ -60,6 +60,15 @@
     height: 20px; /* Adjust the size as needed */
   }
   
+  .card-holder-name {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom:10px
+  }
+  
+
   /* Card Number Input Field */
   .card-number-input {
     display:flex;

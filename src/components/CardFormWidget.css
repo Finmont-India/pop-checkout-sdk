@@ -73,6 +73,13 @@
   }
 }
 
+.card-holder-name{
+  background-color: #fff;
+  padding: 10px;
+  display: flex;
+  width:auto;
+  margin-bottom: 15px;
+}
 
 /* Card number input field */
 .card-number-input{
@@ -106,6 +113,7 @@
 }
 }
 
+.card-holder-name[type="text"],
 .card-number-input input[type="text"],
 .expiration-date-input input[type="text"],
 .cvv-input input[type="text"] {
