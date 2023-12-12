@@ -32,8 +32,8 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
   const [cardNumber, setCardNumber] = useState('');
   const [expirationMonth, setExpirationMonth] = useState('');
   const [cvv, setCVV] = useState('');
-  const [cardHolderName, setCardHolderName] = useState('');
-  const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(true); // Initial validation state
+  // const [cardHolderName, setCardHolderName] = useState('');
+  // const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(true); // Initial validation state
   const [isCardNumberValid, setIsCardNumberValid] = useState(true);
   const [expirationYear, setExpirationYear] = useState('');
   const [isExpirationMonth, setIsExpirationMonth] = useState(true);
@@ -43,19 +43,19 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
   const [cardType, setCardType] = useState<string>('');
 
 
-  const validateCardHolderName = (name: string) => {
+  /* const validateCardHolderName = (name: string) => {
     // Add your validation logic here (e.g., minimum length, special characters check)
     return name.trim().length >= 3; // Example: Check if the name has at least 3 characters
   };
 
-  const handleCardHolderNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+   const handleCardHolderNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setCardHolderName(value);
 
     // Implement your validation logic here
     const isValid = validateCardHolderName(value); // Implement this function
     setIsCardHolderNameValid(isValid);
-  };
+  }; */
 
   const getCardIconSVG = (cardType: string) => {
     switch (cardType.toLowerCase()) {
@@ -84,7 +84,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     if (isCardNumberValid && expirationMonth && expirationYear && isCVVValid && cardNumber && cvv) {
       // Create an object with card data
       const cardData = {
-        name: cardHolderName,
+        // name: cardHolderName,
         number: cardNumber.replace(/\s+/g, ''), // Remove spaces
         expiryMonth: expirationMonth,
         expiryYear: expirationYear,
@@ -202,7 +202,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     <div className={`card-form-widget ${cardFormWidget || ''}`}>
       <h2 className={`head ${textStyles?.head || ''}`}>Enter Card Details</h2>
       <form>
-        <div >
+        {/* <div >
           <label className={`body ${textStyles?.body || ''}`} htmlFor="cardNumber">
             Card Holder Name<span style={{ color: 'red' }}> *</span>
           </label>
@@ -222,7 +222,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
           {!isCardHolderNameValid && (
             <div className={`error ${error || ''}`}>Invalid card holder name</div>
           )}
-        </div>
+          </div> */}
         <div >
           <label className={`body ${textStyles?.body || ''}`} htmlFor="cardNumber">
             Card Number<span style={{ color: 'red' }}> *</span>

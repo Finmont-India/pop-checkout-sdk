@@ -109,7 +109,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 1000,
+            zIndex: 1000000000,
           }}>
             {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
               <SpinnerCircular
@@ -130,7 +130,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             />
             {isLoading && ( // Show spinner while iframe is loading
               <div className={styles.spinnerContainer}>
-                <SpinnerCircular size={40} thickness={80} speed={50} />
+                <SpinnerCircular size={40} thickness={150} speed={50} color="#36a9e0" secondaryColor="lightgray"/>
               </div>
             )}
           </div>
