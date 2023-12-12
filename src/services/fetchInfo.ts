@@ -11,7 +11,6 @@ const getCoordinates = (): Promise<PositionCoordinates | undefined> => {
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
         resolve({
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,

@@ -10,17 +10,19 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
   const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const [ref, setRef] = useState<string>('');
+  const [recRef, setRecRef] = useState<string>('');
 
 
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
-      console.log(result);
       if (result.data.response3Ds && result.data.response3Ds.url) {
         setIframeUrl(result.data.response3Ds.url);
         setFlag(result.data.response3Ds?.isHidden);
       } else {
+        setRecRef('');
+        setRef('');
         setRes(result);
         onClose();
       }
@@ -29,7 +31,13 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
     } finally {
       setIsLoading(false); // Ensure loading state is set to false in both success and error scenarios
     }
-  }, [get3DSResponse])
+  }, [get3DSResponse, setIframeUrl, setFlag, setRes, onClose]);
+
+  useEffect(() => {
+    if (ref !== '' && recRef !== '') {
+      callGet3DSResponse(recRef, ref);
+    }
+  }, [callGet3DSResponse, ref, recRef]);
 
 
   const checkIframeUrl = useCallback((currentIframe) => {
@@ -47,17 +55,18 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
         const reference = params['reference'];
         const receiptReference = params['receiptReference'];
         if (receiptReference && reference) {
-          callGet3DSResponse(receiptReference, reference);
+          setRef(reference);
+          setRecRef(receiptReference);
         }
       }
     }
-  }, [url, setRes]);
+  }, [url, setRes, ref, recRef]);
 
   const onModalClose = () => {
     onAuthClose(true);
     onClose();
   }
-  console.log("isLoading",isLoading);
+  
   useEffect(() => {
     const handleMessage = (event: any) => {
       // Check if the message is from the iframe and if data is a URL
