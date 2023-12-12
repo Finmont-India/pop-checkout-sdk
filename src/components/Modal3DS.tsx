@@ -5,7 +5,14 @@ import 'react-responsive-modal/styles.css';
 import { SpinnerCircular } from "spinners-react";
 import styles from './Modal3DS.css'
 
-const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void; onAuthClose: any; url: string; setRes: any; }> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
+const Modal3DS: React.FC<{
+  isOpen: boolean;
+  isAuth: boolean;
+  onClose: any;
+  onAuthClose: any;
+  url: string;
+  setRes: any;
+}> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
@@ -14,24 +21,28 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
   const [recRef, setRecRef] = useState<string>('');
 
 
-  const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
+  const callGet3DSResponse = useCallback(async (
+    receiptRef: string,
+    ref: string,
+  ) => {
     try {
       const result = await get3DSResponse(receiptRef, ref);
       setRecRef('');
-        setRef('');
-      if (result.data?.response3Ds && result.data.response3Ds?.url) {
+      setRef('');
+      if (
+        result.data?.response3Ds && result.data.response3Ds?.url
+      ) {
         setIframeUrl(result.data.response3Ds.url);
         setFlag(result.data.response3Ds?.isHidden);
       } else {
-        
         setRes(result);
+        setIsLoading(false);
         onClose();
       }
     } catch (error) {
       setRes(error);
-    } finally {
       setIsLoading(false);
-      onClose() // Ensure loading state is set to false in both success and error scenarios
+      onClose();
     }
   }, [get3DSResponse, setIframeUrl, setFlag, setRes, onClose]);
 
@@ -62,7 +73,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
         }
       }
     }
-  }, [url, setRes, ref, recRef]);
+  }, [url, setRes]);
 
   const onModalClose = () => {
     onAuthClose(true);
@@ -75,14 +86,11 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
       if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
         // Handle the URL received from the iframe
         setIframeUrl('');
-          checkIframeUrl(event.data);
-        
+        checkIframeUrl(event.data);
       }
     };
-
     // Add an event listener to listen for messages
     window.addEventListener('message', handleMessage);
-
     return () => {
       window.removeEventListener('message', handleMessage);
     };
@@ -108,8 +116,8 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 999999999999,
-            opacity:1,
-            transform:"none",
+            opacity: 1,
+            transform: "none",
           }}>
             {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
               <SpinnerCircular
@@ -129,7 +137,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
               }}
             />
             {isLoading && ( // Show spinner while iframe is loading
-                <SpinnerCircular size={40} thickness={150} speed={50} color="#36a9e0" secondaryColor="lightgray"/>
+              <SpinnerCircular size={40} thickness={150} speed={50} color="#36a9e0" secondaryColor="lightgray" />
             )}
           </div>
         ) :
