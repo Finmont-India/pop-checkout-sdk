@@ -108,6 +108,8 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             justifyContent: 'center',
             alignItems: 'center',
             zIndex: 999999999999,
+            opacity:1,
+            transform:"none",
           }}>
             {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
               <SpinnerCircular
