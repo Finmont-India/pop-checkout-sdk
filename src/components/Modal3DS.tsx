@@ -15,7 +15,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
 
 
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
-    console.log("method get")
     try {
       const result = await get3DSResponse(receiptRef, ref);
       setRecRef('');
@@ -72,7 +71,6 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
 
   useEffect(() => {
     const handleMessage = (event: any) => {
-      console.log("multiple&&&&&&")
       // Check if the message is from the iframe and if data is a URL
       if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
         // Handle the URL received from the iframe
@@ -109,7 +107,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 1000000000,
+            zIndex: 999999999999,
           }}>
             {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
               <SpinnerCircular
@@ -129,9 +127,7 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
               }}
             />
             {isLoading && ( // Show spinner while iframe is loading
-              <div className={styles.spinnerContainer}>
                 <SpinnerCircular size={40} thickness={150} speed={50} color="#36a9e0" secondaryColor="lightgray"/>
-              </div>
             )}
           </div>
         ) :
