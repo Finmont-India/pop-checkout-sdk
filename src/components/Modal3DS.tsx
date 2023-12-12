@@ -15,21 +15,24 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
 
 
   const callGet3DSResponse = useCallback(async (receiptRef: string, ref: string) => {
+    console.log("method get")
     try {
       const result = await get3DSResponse(receiptRef, ref);
-      if (result.data.response3Ds && result.data.response3Ds.url) {
+      setRecRef('');
+        setRef('');
+      if (result.data?.response3Ds && result.data.response3Ds?.url) {
         setIframeUrl(result.data.response3Ds.url);
         setFlag(result.data.response3Ds?.isHidden);
       } else {
-        setRecRef('');
-        setRef('');
+        
         setRes(result);
         onClose();
       }
     } catch (error) {
       setRes(error);
     } finally {
-      setIsLoading(false); // Ensure loading state is set to false in both success and error scenarios
+      setIsLoading(false);
+      onClose() // Ensure loading state is set to false in both success and error scenarios
     }
   }, [get3DSResponse, setIframeUrl, setFlag, setRes, onClose]);
 
@@ -69,23 +72,25 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
 
   useEffect(() => {
     const handleMessage = (event: any) => {
+      console.log("multiple&&&&&&")
       // Check if the message is from the iframe and if data is a URL
       if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
         // Handle the URL received from the iframe
         setIframeUrl('');
-        checkIframeUrl(event.data);
+          checkIframeUrl(event.data);
+        
       }
     };
 
     // Add an event listener to listen for messages
     window.addEventListener('message', handleMessage);
- 
+
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [iframeRef]);
+  }, [iframeRef, ref, recRef]);
 
-    useEffect(() => {
+  useEffect(() => {
     setIsLoading(true); // Set loading to true when the iframe URL changes
   }, [iframeUrl]);
 
@@ -122,12 +127,12 @@ const Modal3DS: React.FC<{ isOpen: boolean; isAuth: boolean; onClose: () => void
                 display: "none",
                 pointerEvents: "none",
               }}
-          />
-          {isLoading && ( // Show spinner while iframe is loading
-            <div className={styles.spinnerContainer}>
-              <SpinnerCircular size={40} thickness={80} speed={50} />
-            </div>
-          )}
+            />
+            {isLoading && ( // Show spinner while iframe is loading
+              <div className={styles.spinnerContainer}>
+                <SpinnerCircular size={40} thickness={80} speed={50} />
+              </div>
+            )}
           </div>
         ) :
         (

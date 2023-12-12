@@ -5,32 +5,35 @@ import { getCardType } from '../services/CardType';
 import './CardFormWidget.css'; // Import your CSS file (you should create this file with the defined class styles)
 
 export interface CardFormWidgetProps {
-    cardFormWidget?: string;
-    textStyles?: {
-      head?: string;
-      body?: string;
-    };
-    cardNumberInput?: string;
-    cardImg?: string;
-    expirationDateInput?: string;
-    cvvInput?: string;
-    invalid?:string;
-    error?: string;
-    feedback?: string;
-    inputContainer?: string;
-    dateContainer?: string;
-    // Add more styles here...
+  cardFormWidget?: string;
+  textStyles?: {
+    head?: string;
+    body?: string;
+  };
+  cardNumberInput?: string;
+  cardHolderName?: string;
+  cardImg?: string;
+  expirationDateInput?: string;
+  cvvInput?: string;
+  invalid?: string;
+  error?: string;
+  feedback?: string;
+  inputContainer?: string;
+  dateContainer?: string;
+  // Add more styles here...
 }
 // In CardFormWidget.tsx in your SDK
 export interface CardWidgetProps {
   customStyles?: CardFormWidgetProps;
-  onTokenReceived: ({}) => void;
+  onTokenReceived: ({ }) => void;
 }
 
 const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceived }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expirationMonth, setExpirationMonth] = useState('');
   const [cvv, setCVV] = useState('');
+  const [cardHolderName, setCardHolderName] = useState('');
+  const [isCardHolderNameValid, setIsCardHolderNameValid] = useState(true); // Initial validation state
   const [isCardNumberValid, setIsCardNumberValid] = useState(true);
   const [expirationYear, setExpirationYear] = useState('');
   const [isExpirationMonth, setIsExpirationMonth] = useState(true);
@@ -39,6 +42,20 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
   const [tokenizationError, setTokenizationError] = useState<string | null>(null);
   const [cardType, setCardType] = useState<string>('');
 
+
+  const validateCardHolderName = (name: string) => {
+    // Add your validation logic here (e.g., minimum length, special characters check)
+    return name.trim().length >= 3; // Example: Check if the name has at least 3 characters
+  };
+
+  const handleCardHolderNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = event.target;
+    setCardHolderName(value);
+
+    // Implement your validation logic here
+    const isValid = validateCardHolderName(value); // Implement this function
+    setIsCardHolderNameValid(isValid);
+  };
 
   const getCardIconSVG = (cardType: string) => {
     switch (cardType.toLowerCase()) {
@@ -67,6 +84,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     if (isCardNumberValid && expirationMonth && expirationYear && isCVVValid && cardNumber && cvv) {
       // Create an object with card data
       const cardData = {
+        name: cardHolderName,
         number: cardNumber.replace(/\s+/g, ''), // Remove spaces
         expiryMonth: expirationMonth,
         expiryYear: expirationYear,
@@ -82,7 +100,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
           const cardType = token?.data.type || '';
           if (typeof receivedToken === 'string' && typeof cardType === 'string') {
             const data = {
-              token:receivedToken,
+              token: receivedToken,
               type: cardType,
             }
             onTokenReceived(data);
@@ -171,10 +189,10 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     cardFormWidget,
     textStyles,
     cardNumberInput,
-     cardImg,
-   expirationDateInput,
+    cardImg,
+    expirationDateInput,
     cvvInput,
-     error,
+    error,
     feedback,
     inputContainer,
     dateContainer,
@@ -184,6 +202,27 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
     <div className={`card-form-widget ${cardFormWidget || ''}`}>
       <h2 className={`head ${textStyles?.head || ''}`}>Enter Card Details</h2>
       <form>
+        <div >
+          <label className={`body ${textStyles?.body || ''}`} htmlFor="cardNumber">
+            Card Holder Name<span style={{ color: 'red' }}> *</span>
+          </label>
+          <div className={`card-holder-name ${cardHolderName || ''}`}>
+            <input
+              type="text"
+              id="cardHolderName"
+              placeholder="Card Holder Name"
+              onChange={handleCardHolderNameChange}
+              value={cardHolderName}
+              style={{ border: 'none', paddingLeft: '5px', width: 'auto', outline: 'none', backgroundColor: 'transparent' }}
+            // Add className, styles, and error display as per your existing structure
+            />
+
+          </div>
+
+          {!isCardHolderNameValid && (
+            <div className={`error ${error || ''}`}>Invalid card holder name</div>
+          )}
+        </div>
         <div >
           <label className={`body ${textStyles?.body || ''}`} htmlFor="cardNumber">
             Card Number<span style={{ color: 'red' }}> *</span>
@@ -200,40 +239,40 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
             />
           </div>
           {!isCardNumberValid && <div className={`error ${error || ''}`}>Invalid card number</div>}
- 
+
         </div>
-        <div className={`input-container ${inputContainer ||''}`}>
+        <div className={`input-container ${inputContainer || ''}`}>
           <div className={`date-container ${dateContainer || ''}`} >
-          <div className={`input-field`} style={{marginRight:'10px'}}>
-            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationMonth">Month<span style={{ color: 'red' }}> *</span></label>
-            <div>
-              <input
-                type="text"
-                id="expirationMonth"
-                value={expirationMonth}
-                placeholder="MM"
-                onChange={handleExpirationMonthChange}
-                className={`expiration-date-input ${expirationDateInput || ''}`}
-              />
+            <div className={`input-field`} style={{ marginRight: '10px' }}>
+              <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationMonth">Month<span style={{ color: 'red' }}> *</span></label>
+              <div>
+                <input
+                  type="text"
+                  id="expirationMonth"
+                  value={expirationMonth}
+                  placeholder="MM"
+                  onChange={handleExpirationMonthChange}
+                  className={`expiration-date-input ${expirationDateInput || ''}`}
+                />
+              </div>
+              {!isExpirationMonth && <div className={`error ${error || ''}`}>Invalid month</div>}
+
             </div>
-            {!isExpirationMonth && <div className={`error ${error || ''}`}>Invalid month</div>}
- 
-          </div>
-          <div className={`input-field`}>
-            <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationYear">Year<span style={{ color: 'red' }}> *</span></label>
-            <div>
-              <input
-                type="text"
-                id="expirationYear"
-                value={expirationYear}
-                placeholder="YYYY"
-                onChange={handleExpirationYearChange}
-                className={`expiration-date-input ${expirationDateInput || ''}`}
-              />
+            <div className={`input-field`}>
+              <label className={`body ${textStyles?.body || ''}`} htmlFor="expirationYear">Year<span style={{ color: 'red' }}> *</span></label>
+              <div>
+                <input
+                  type="text"
+                  id="expirationYear"
+                  value={expirationYear}
+                  placeholder="YYYY"
+                  onChange={handleExpirationYearChange}
+                  className={`expiration-date-input ${expirationDateInput || ''}`}
+                />
+              </div>
+              {!isExpirationYear && <div className={`error ${error || ''}`}>Invalid year</div>}
+
             </div>
-            {!isExpirationYear && <div className={`error ${error || ''}`}>Invalid year</div>}
- 
-          </div>
           </div>
           <div className={`input-field`}>
             <label className={`body ${textStyles?.body || ''}`} htmlFor="cvv">CVV<span style={{ color: 'red' }}> *</span></label>
@@ -248,7 +287,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
               />
             </div>
             {!isCVVValid && <div className={`error ${error || ''}`}>Invalid cvv</div>}
- 
+
           </div>
         </div>
       </form>
