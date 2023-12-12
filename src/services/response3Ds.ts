@@ -7,7 +7,6 @@ import { initatePayment } from "./sdkFunctions";
 export const get3DSResponse = async (receiptReference: string, reference: string) => {
   try {
     const response = await getCachedRequest(reference);
-    console.log(response);
 
     if (response.data.paymentSessionData) {
       const obj3Ds = await get3DSObject(receiptReference);
