@@ -29,7 +29,7 @@ const App = () => {
   }
   const setValues = () =>{
     setIsHidden(true);
-    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=53e923d6-d819-48eb-a9f3-5feba0cc9d14"
+    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=05d9a234-d18b-438b-b92c-147e87319993"
     )
   }
 
@@ -48,13 +48,20 @@ const App = () => {
     fetchData();
   }, [getInfo]);
   
-  if(res){
-    console.log(res);
-  }
+  const closeModal = () => {
+    setIsModalOpen(false);
+    console.log("Modal closed");
+  };
 
   useEffect(() => {
-    console.log(isModalOpen); // Log isModalOpen only after the initial render
-  }, [isModalOpen]);
+    console.log(isModalOpen);
+    if (res) {
+      setIsHidden(null);
+    setUrl3ds(null);
+      console.log("data:", res);
+    }
+  }, [isModalOpen,res]);
+
 
  return (
     <div style={{ zIndex: 9999999999 }}>
@@ -83,24 +90,16 @@ const App = () => {
         </div>
       </div>
       {/* Modal */}
-      {isModalOpen && (
-        <div>
-        {console.log("Modal calling twice")}
+      {isModalOpen && !res && isHidden!=null && url3ds!==null && (
         <ChildApp
           isModalOpen={isModalOpen}
           isOpen={true}
-          onClose={() => {
-            setIsModalOpen(false);
-            setIsHidden(null);
-            setUrl3ds(null);
-            console.log("Modal closed");
-          }}
+          onClose={()=>closeModal()}
           url={url3ds}
-          setRes={()=>setRes}
+          setRes={data=>setRes(data)} // Pass the setRes function directly
           onAuthClose={() => setFlag(false)}
           isAuth={isHidden}
         />
-        </div>
       )}
     </div>
   );
