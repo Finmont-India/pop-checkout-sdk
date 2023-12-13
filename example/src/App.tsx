@@ -29,7 +29,7 @@ const App = () => {
   }
   const setValues = () =>{
     setIsHidden(true);
-    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=05d9a234-d18b-438b-b92c-147e87319993"
+    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=0585ee00-82df-4a0a-94c0-c3089319858d"
     )
   }
 
