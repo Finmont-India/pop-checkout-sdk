@@ -13,6 +13,7 @@ const Modal3DS: React.FC<{
   url: string;
   setRes: any;
 }> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
+  console.log(onAuthClose)
   const isMounted = useRef<boolean>(true);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [flag, setFlag] = useState<boolean>(isAuth);
@@ -21,7 +22,7 @@ const Modal3DS: React.FC<{
   const [ref, setRef] = useState<string>('');
   const [recRef, setRecRef] = useState<string>('');
 
-  useEffect(() => {
+ useEffect(() => {
     return () => {
       isMounted.current = false; // Set isMounted to false on unmount
     };
@@ -46,12 +47,12 @@ const Modal3DS: React.FC<{
         setFlag(result.data.response3Ds?.isHidden);
       } else {
         setRes(result);
-        onClose();
+         onClose();
       }
     }
     } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+     console.log(error);
+     setIsLoading(false);
       onClose();
     }
   }, [get3DSResponse, setIframeUrl, setFlag, setRes, onClose]);
@@ -120,7 +121,7 @@ const Modal3DS: React.FC<{
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundColor: 'rgba(255, 255, 255, 0.7)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
