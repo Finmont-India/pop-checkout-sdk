@@ -28,7 +28,7 @@ const App = () => {
     setIsModalOpen(true);
   }
   const setValues = () =>{
-    setIsHidden(true);
+    setIsHidden(false);
     setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=50df66eb-f387-4e72-9cfc-33c8c11629d9"
     )
   }
