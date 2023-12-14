@@ -30,7 +30,24 @@ To get started with finmont-checkout-sdk, import it and configure it:
 ```javascript
 import configureSdk from 'finmont-checkout-sdk';
 
-configureSdk(apiKey, envValue);;
+The SDK offers various components and functionalities. Here's an example of its usage:
+
+  import { useSdk } from 'pop-checkout-sdk';
+
+  const App = () => {
+    // State declarations
+    // ...
+
+    const { getInfo, Widget, Modal3DS } = useSdk();
+    // Other logic and functionalities using SDK
+
+    return (
+      // Your React components and logic utilizing the SDK
+      // ...
+    );
+  };
+
+  export default App;
 
 #### Usage
 
@@ -57,42 +74,24 @@ params:
       onTokenReceived: (token: string) => void;
         Description: eventHandler that returns the tokenizes the card data.
            
+
+For getting the browser and device information
+
+   useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await getInfo();
+        // Process the data as needed
+        console.log("Fetch Geolocation:", data)
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle errors
+      }
+    }
+    fetchData();
+  }, [getInfo]);
+
   
-For getting the 3ds respose of the present transaction working on 
-
-  First extract the recieptReference and the reference from the url params in the window object
-
-    const params = new URLSearchParams(window.location.search);
-    const recieptRef = params.get("receiptReference");
-    const ref = params.get("reference");
-    const recieptReference = recieptRef ? recieptRef : '';
-    const reference = ref ? ref : '';
-
-  const { get3DSResponse } = useSdk(); // Assuming the SDK provides a function named get3DSResponse
-
-  const callGet3DSResponse = async () => {
-    try {
-      const result = await get3DSResponse(recieptReference, reference);
-      console.log("Payment Result:", result);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-
-  useEffect(() => {
-    // Configure the SDK with your API key and environment (e.g., "dev")
-    if(recieptReference && ref){
-      callGet3DSResponse();
-    }
-  }, [key]); // here key is the apiKey that is used while configuring the sdk in your application in frontend
-
-  params:
-    For the get3DSResponse to work , should pass the the recieptReference and the reference as the parameters to the function.
-
-      recieptReference:<string>=''
-      reference:<string>=''
-
 
 For getting the payment status of a particular payment
 
@@ -105,12 +104,96 @@ For getting the payment status of a particular payment
     }
   }
 
+
+
 params:
     For the getPaymentResponse to work , should pass the the recieptReference, key, env as the parameters to the function.
 
       recieptReference:<string>=''
       key:<string>=''
       env:<string>='prod'|'test'|'dev'|'stg'
+
+
+
+For 3DS authentication instead of redirecting to a new page, the Modal3DS  facilitates the functionality in the same page 
+
+  // App.tsx
+
+    import React, { useEffect, useState } from 'react';
+    import { configureSdk, useSdk } from 'pop-checkout-sdk';
+    import './App.css'
+    import 'pop-checkout-sdk/dist/index.css';
+    import ChildApp from './components/ChildApp';
+
+    const App = () => {
+
+      const [res, setRes] = useState<any>();
+      const [url3ds, setUrl3ds] = useState<string | null>(null);
+      const [isHidden, setIsHidden] = useState<boolean | null>(null);
+      const [, setFlag] = useState<boolean>(false);
+      const [isModalOpen, setIsModalOpen] = useState(false);
+
+      const onTokenReceived = (data: any) => {
+        setRecievedObj(data)
+      }
+
+      const setValues = () =>{
+        setIsHidden(true); // the isHidden value should be the value from the response object of card api response.data.response3Ds.isHidden 
+        setUrl3ds("https:/.............")// the url from the card api i.e response.body.response3Ds.url
+      }
+
+      const closeModal = () => {
+        setIsModalOpen(false);
+      };
+
+      useEffect(() => {
+        if (res) {                                                                              
+          setIsHidden(null);
+          setUrl3ds(null);
+        }
+      }, [isModalOpen,res]);
+
+
+    return (
+        <div>
+          <div>
+            {/* statements */}
+          </div>
+          {/* Modal */}
+          {isModalOpen && !res && isHidden!=null && url3ds!==null && (
+            <Modal3DS
+              isOpen={isModalOpen}
+              onClose={()=>closeModal()}
+              url={url3ds}
+              setRes={data=>setRes(data)} // Pass the setRes function directly
+              onAuthClose={() => setFlag(false)}
+              isAuth={isHidden}
+            />
+          )}
+        </div>
+      );
+    };
+
+    export default App;
+
+
+
+
+                NOTE: HAVE TO ENSURE THAT ALL THE STATE VARIABLES ARE SET APPRORIATELY, BEFORE TRIGGERING THE MODAL3DS AND WHILE CLOSING THE MODAL3DS BECAUSE IT WILL LEAD TO UNUSUAL RE-RENDERS.
+
+
+
+  params:
+      isModalOpen:boolean =  Flag to control modal visibility.
+      onClose:  () => void; = eventHandler Callback for closing the modal.
+      url: string | null = URL for 3DS authentication.
+      setRes: (data: any) => void; = Function to set the response data.
+      onAuthClose:  () => void; = Callback for authentication closure.
+      isAuth: boolean|null = Flag for authentication status.
+
+
+
+
 
 
 
