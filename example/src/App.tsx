@@ -64,7 +64,18 @@ const App = () => {
 
 
  return (
-    <div style={{ zIndex: 9999999999, margin:'30px' }}>
+  <div><div style={{ display: 'flex', flexDirection: 'column' }}>
+  <Widget
+    type="card"
+    onTokenReceived={onTokenReceived}
+    widgetStyles={{
+      customStyles: {
+        // Add your custom widget styles here if needed
+      },
+    }}
+  />
+</div>
+    <div style={{ zIndex: 9999999999, margin:'30px', height:"700px", width: "900px", border: 'solid'}}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Widget
           type="card"
@@ -101,6 +112,7 @@ const App = () => {
           isAuth={isHidden}
         />
       )}
+    </div>
     </div>
   );
 };
