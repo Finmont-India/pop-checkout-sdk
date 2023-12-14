@@ -110,16 +110,6 @@ const Modal3DS: React.FC<{
     setIsLoading(true); // Set loading to true when the iframe URL changes
   }, [iframeUrl]);
 
-
-
-  useEffect(() => {
-    console.log("hidden Iframe Loaded along with spinner");
-    if(!flag || flag=== null){
-      console.log("Hidden mode exit triggered")
-    }
-  }, []); // Empty dependency array ensures the log runs only once on mount
-
-
   return (
     <div>
       {flag ?
@@ -138,14 +128,6 @@ const Modal3DS: React.FC<{
             opacity: 1,
             transform: "none",
           }}>
-            {console.log("spinner div")}
-            {/* <div style={{ width: "100%", height: "100%", display: "flex", justifyContent: "center", alignItems: "center", zIndex:999  }}>
-              <SpinnerCircular
-                size={40}
-                thickness={80}
-                speed={50}
-              />
-            </div> */}
             <iframe
               title="Form"
               ref={iframeRef}

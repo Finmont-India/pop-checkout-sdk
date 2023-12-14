@@ -29,7 +29,7 @@ const App = () => {
   }
   const setValues = () =>{
     setIsHidden(true);
-    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=0585ee00-82df-4a0a-94c0-c3089319858d"
+    setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=50df66eb-f387-4e72-9cfc-33c8c11629d9"
     )
   }
 
@@ -55,7 +55,7 @@ const App = () => {
 
   useEffect(() => {
     console.log(isModalOpen);
-    if (res) {
+    if (res) {                                                                              
       setIsHidden(null);
     setUrl3ds(null);
       console.log("data:", res);
