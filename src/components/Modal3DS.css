@@ -1,5 +1,9 @@
 /* examples/custom-styling.css */
   /* Default styles for the modal content */
+  .modalRoot {
+    z-index: 9999999;
+  }
+  
 .customModal {
     width: 50%;
     height: 70%;
