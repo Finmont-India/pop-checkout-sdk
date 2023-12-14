@@ -28,7 +28,7 @@ const App = () => {
     setIsModalOpen(true);
   }
   const setValues = () =>{
-    setIsHidden(false);
+    setIsHidden(true);
     setUrl3ds("https://pci-api-demo.airwallex.com/pa/card3ds/hk/three-ds-method/redirect/start?key=50df66eb-f387-4e72-9cfc-33c8c11629d9"
     )
   }
@@ -64,7 +64,7 @@ const App = () => {
 
 
  return (
-    <div style={{ zIndex: 9999999999 }}>
+    <div style={{ zIndex: 9999999999, margin:'30px' }}>
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <Widget
           type="card"
