@@ -16,7 +16,7 @@ export const getBaseUrl = (env: string) => {
     paymentUrl: '',
     tokenizationUrl: '',
   }
-  if (env.toLowerCase() === 'Prod') {
+  if (env.toLowerCase() === 'prod') {
     urlObj.checkoutUrl = PROD_CHECKOUT_URL;
     urlObj.paymentUrl = PROD_PAYMENT_URL;
     urlObj.tokenizationUrl = PROD_TOKENISATION_URL;
