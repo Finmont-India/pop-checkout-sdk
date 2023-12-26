@@ -235,7 +235,7 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
               placeholder="Card Number E.g.: 49..., 51..., 36..., 37..."
               onChange={handleCardNumberChange}
               value={cardNumber}
-              style={{ border: 'none', borderLeft: '1px solid gray', paddingLeft: '5px', width: 'auto', outline: 'none', backgroundColor: 'transparent' }}
+              style={{ border: 'none', borderLeft: '1px solid gray', paddingLeft: '5px', width: 'auto', outline: 'none', backgroundColor: 'transparent', overflow: 'hidden'}}
             />
           </div>
           {!isCardNumberValid && <div className={`error ${error || ''}`}>Invalid card number</div>}
