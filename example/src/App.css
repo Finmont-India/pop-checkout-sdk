@@ -41,7 +41,7 @@
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 580px) {
   .input-container {
     display: block; /* Change to block display for even smaller screens */
   }
