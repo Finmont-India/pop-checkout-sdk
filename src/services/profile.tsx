@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import loadjs from 'loadjs';
 
 // ... rest of your code remains the same ...
@@ -19,17 +18,15 @@ const dftp: Idftp = {
 
   export interface ProfileComponentProps {
     merchantId: number;
-    setRef: (ref: string) =>any;
+    setRef: any;
   }
   
-  const Profile = ({ merchantId, setRef }:ProfileComponentProps) => {
+  export const profile = ({ merchantId, setRef }:ProfileComponentProps) => {
     const attemptRef = uuidv4();
-        console.log("load initiated");
         const options = {
           attemptReference: attemptRef,
           sensitiveFields: ['ccn', 'cvv'],
         };
-        console.log(options);
         const getdftp = async () => {
           try {
             const dftpPromise = await loadjs(
@@ -51,23 +48,15 @@ const dftp: Idftp = {
       
         const getProfiling = () => {
           const dftpPromise = getdftp();
-          console.log(dftpPromise);
           dftpPromise
             .then((res: any) => {
               const result = dftp.profileCompleted();
-              console.log(result,res);
+              console.log(result);
               setRef(attemptRef);
               return res;
             })
             .catch((error: any) => error);
         };
       
-        useEffect(() => {
-          getProfiling();
-        }, []);
-  
-    return;
+        getProfiling();
   };
-  
-  
-  export default Profile;

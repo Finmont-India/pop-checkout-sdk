@@ -47,7 +47,6 @@ export const initatePayment = async ( order: any) => {
 
 export async function authorizeCard(order: { }): Promise<any> {
   const { apiKey, env } = getConfig();
-  console.log(getConfig())
   const customHeaders = {
     Authorization: `Bearer ${encodeURIComponent(apiKey)}`,
   };
@@ -55,12 +54,9 @@ export async function authorizeCard(order: { }): Promise<any> {
   const headers = {
     ...customHeaders,
   };
-  console.log("function triggered");
   try {
     const urlObj = getBaseUrl(env);
-    console.log(env);
     const BASE_URL = urlObj.paymentUrl;
-    console.log(BASE_URL);
     // @ts-ignore
     const requestData: AxiosRequestConfig<any> = {
       method: 'post',
@@ -71,7 +67,6 @@ export async function authorizeCard(order: { }): Promise<any> {
 
     const response: AxiosResponse<any> = await axios(requestData);
 
-    console.log(response.data);
     const reqOrder = {
       ...{...order,orderPayloadReference:response.data?.cacheReference},
       integrationType: "sdk",
@@ -81,8 +76,6 @@ export async function authorizeCard(order: { }): Promise<any> {
     const paymentResult = await initatePayment(reqOrder);
 
     // Use the paymentResult as needed
-    
-    console.log(paymentResult);
     if (
       !paymentResult.data.response3Ds
      ) {
