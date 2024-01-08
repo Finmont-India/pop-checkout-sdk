@@ -1,24 +1,21 @@
-// sdk.js
-
 import { configure } from './config';
 import * as sdkFunctions from './services/sdkFunctions';
 import * as response3Ds from './services/response3Ds';
 import Modal3DS from './components/Modal3DS';
 import Widget from './components/Widget';
+import * as profile from './services/profile';
 import * as fetchInfo from './services/fetchInfo';
 
 let isSdkConfigured = false;
 
-// Function to configure the SDK
 const configureSdk = (apiKey: string, env: string) => {
   // Configure the SDK with the API key and environment
- configure(apiKey,env)
+  configure(apiKey, env);
   
   // Set the configuration flag to true
   isSdkConfigured = true;
 };
 
-// Export a function that checks if the SDK is configured and then exports the SDK functions and components
 export const useSdk = () => {
   if (!isSdkConfigured) {
     throw new Error('SDK is not configured. Call configureSdk() first.');
@@ -30,8 +27,8 @@ export const useSdk = () => {
     ...response3Ds,
     Modal3DS,
     ...fetchInfo,
+    ...profile,
   };
 };
 
-// Export configureSdk function separately
 export { configureSdk };
