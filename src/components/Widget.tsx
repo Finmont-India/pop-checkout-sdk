@@ -16,7 +16,6 @@ export interface WidgetProps {
 export const Widget: React.FC<WidgetProps> = ({ widgetStyles, type, onTokenReceived }) => {
   // Destructure the customStyles property
   const { customStyles } = widgetStyles || {};
-
   if (type.toLowerCase() === "card") {
     return (
       <div

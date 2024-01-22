@@ -28,7 +28,7 @@ export interface CardWidgetProps {
   onTokenReceived: ({ }) => void;
 }
 
-const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceived }) => {
+const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceived, }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [expirationMonth, setExpirationMonth] = useState('');
   const [cvv, setCVV] = useState('');
@@ -41,7 +41,6 @@ const CardFormWidget: React.FC<CardWidgetProps> = ({ customStyles, onTokenReceiv
   const [isCVVValid, setIsCVVValid] = useState(true);
   const [tokenizationError, setTokenizationError] = useState<string | null>(null);
   const [cardType, setCardType] = useState<string>('');
-
 
   /* const validateCardHolderName = (name: string) => {
     // Add your validation logic here (e.g., minimum length, special characters check)
