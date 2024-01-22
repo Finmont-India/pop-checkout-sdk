@@ -23,7 +23,7 @@ const NethoneProfiling: React.FC<{ srcUrl: string; setRes: any }> = ({ srcUrl, s
 
   useEffect(() => {
     const script = document.createElement('script');
-    script.src = srcUrl // 'https://d2f3o27zxe1hmb.cloudfront.net/s/519149/doZdjx.js';
+    script.src = srcUrl;
     script.async = true;
     script.id = 'SCRIPT_TAG_ID';
     script.crossOrigin = 'use-credentials';
