@@ -5,6 +5,7 @@ import Modal3DS from './components/Modal3DS';
 import Widget from './components/Widget';
 import NethoneProfiling from './services/NethoneProfiling';
 import * as fetchInfo from './services/fetchInfo';
+import * as claropay from './services/Claropay';
 
 let isSdkConfigured = false;
 
@@ -28,6 +29,7 @@ export const useSdk = () => {
     Modal3DS,
     ...fetchInfo,
     NethoneProfiling,
+    ...claropay,
   };
 };
 

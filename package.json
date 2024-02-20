@@ -1,6 +1,6 @@
 {
   "name": "finmont-checkout-sdk",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "private": false,
   "description": "library that supports the payment elements and modules",
   "author": "Finmont",
@@ -14,7 +14,7 @@
   },
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
-    "start": "microbundle-crl watch --no-compress --format modern,cjs",
+    "start": "NODE_OPTIONS=--max_old_space_size=4096 microbundle-crl watch --no-compress --format modern,cjs",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -28,6 +28,7 @@
     "react": "^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
+    "@claro/sdkclaro": "^1.2.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
