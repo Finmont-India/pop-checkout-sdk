@@ -2,42 +2,28 @@
 import sdkclaro from '@claro/sdkclaro'
 const { v4: uuidv4 } = require('uuid');
 
-let instance: any;
-
+let inst: any
 export const getClaro = async () => {
-    console.log(sdkclaro)
-    // Initialize Claro instance
-    // @ts-ignore
-    instance = sdkclaro.getInstance(
-      "Xeni",
-      () => {
-        console.log("onLaunch");
-      },
-      () => {
-        console.log("onShow");
-      },
-      () => {
-        console.log("onHide");
-      },
-      () => {
-        console.log("onError");
-      },
-      (eventName: any, eventInformation: any) => {
-        console.log(eventInformation, eventName);
-        if (eventName === "ONBACK") {
-          window.history.back();
-        }
-        if (eventName === "otp_response") {
-          console.log("otp response");
-        }
-        if (eventName === 'responseRecharge') {
-          console.log(eventInformation, "Log responseRecharge");
-        }
-      },
-      {}
-    );
-    console.log(instance)
+  try {
+      // Initialize Claro instance
+      const instance = await
+          sdkclaro.getInstance(
+              // Instance initialization parameters...
+          );
+      console.log(instance); // This line is within the try block
+      inst = instance;
+      return instance;
+  } catch (error) {
+      console.error("Error initializing Claro instance:", error);
+      throw error;
+  }
 }
+
+// This is where you're likely getting the error
+console.log(inst);
+
+
+
 
 // Function to initialize payment transaction
 export const initializePayment = async (cardNumber: string, idCom: string, idGrp: string, checkDigit: number, amount: string, appId: string, setRes: any
@@ -55,7 +41,7 @@ export const initializePayment = async (cardNumber: string, idCom: string, idGrp
   
       const key = uuidv4();
       // @ts-ignore
-      const top = inst.setState(key, JSON.stringify(data),
+      const top = inst.setState(key, data,
         (result: any) => {
           console.log(result);
         },
@@ -80,7 +66,7 @@ export const initializePayment = async (cardNumber: string, idCom: string, idGrp
         totalCommission: 0
       };
       if (top) {
-      const resp = instance.transactionPayment(
+      const resp = inst.transactionPayment(
         payload,
         (result: any) => {
           console.log(result);
