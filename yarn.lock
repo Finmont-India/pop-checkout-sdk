@@ -2203,9 +2203,9 @@
     "@types/react" "^16"
 
 "@types/react@*":
-  version "18.2.55"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/@types/react/-/react-18.2.55.tgz#38141821b7084404b5013742bc4ae08e44da7a67"
-  integrity sha1-OBQYIbcIRAS1ATdCvErgjkTaemc=
+  version "18.2.57"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/@types/react/-/react-18.2.57.tgz#147b516d8bdb2900219acbfc6f939bdeecca7691"
+  integrity sha1-FHtRbYvbKQAhmsv8b5Ob3uzKdpE=
   dependencies:
     "@types/prop-types" "*"
     "@types/scheduler" "*"
@@ -2968,10 +2968,12 @@ autoprefixer@^9.6.1, autoprefixer@^9.7.3:
     postcss "^7.0.32"
     postcss-value-parser "^4.1.0"
 
-available-typed-arrays@^1.0.5, available-typed-arrays@^1.0.6:
-  version "1.0.6"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/available-typed-arrays/-/available-typed-arrays-1.0.6.tgz#ac812d8ce5a6b976d738e1c45f08d0b00bc7d725"
-  integrity sha1-rIEtjOWmuXbXOOHEXwjQsAvH1yU=
+available-typed-arrays@^1.0.6:
+  version "1.0.7"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/available-typed-arrays/-/available-typed-arrays-1.0.7.tgz#a5cc375d6a03c2efc87a553f3e0b1522def14846"
+  integrity sha1-pcw3XWoDwu/IelU/PgsVIt7xSEY=
+  dependencies:
+    possible-typed-array-names "^1.0.0"
 
 aws-sign2@~0.7.0:
   version "0.7.0"
@@ -3641,9 +3643,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001035, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001587:
-  version "1.0.30001587"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/caniuse-lite/-/caniuse-lite-1.0.30001587.tgz#a0bce920155fa56a1885a69c74e1163fc34b4881"
-  integrity sha1-oLzpIBVfpWoYhaacdOEWP8NLSIE=
+  version "1.0.30001588"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/caniuse-lite/-/caniuse-lite-1.0.30001588.tgz#07f16b65a7f95dba82377096923947fb25bce6e3"
+  integrity sha1-B/FrZaf5XbqCN3CWkjlH+yW85uM=
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -4970,9 +4972,9 @@ ee-first@1.1.1:
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
 electron-to-chromium@^1.3.378, electron-to-chromium@^1.4.668:
-  version "1.4.672"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/electron-to-chromium/-/electron-to-chromium-1.4.672.tgz#f8ce803b43898b7e91dcfcf70d6fd656b11a645d"
-  integrity sha1-+M6AO0OJi36R3Pz3DW/WVrEaZF0=
+  version "1.4.675"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/electron-to-chromium/-/electron-to-chromium-1.4.675.tgz#9e612a5339e3c9f884982478a8aaf2da3ab6ec7d"
+  integrity sha1-nmEqUznjyfiEmCR4qKry2jq27H0=
 
 elliptic@^6.5.3, elliptic@^6.5.4:
   version "6.5.4"
@@ -6522,9 +6524,9 @@ has-property-descriptors@^1.0.0, has-property-descriptors@^1.0.1, has-property-d
     es-define-property "^1.0.0"
 
 has-proto@^1.0.1:
-  version "1.0.1"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/has-proto/-/has-proto-1.0.1.tgz#1885c1305538958aff469fef37937c22795408e0"
-  integrity sha1-GIXBMFU4lYr/Rp/vN5N8InlUCOA=
+  version "1.0.3"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/has-proto/-/has-proto-1.0.3.tgz#b31ddfe9b0e6e9914536a6ab286426d0214f77fd"
+  integrity sha1-sx3f6bDm6ZFFNqarKGQm0CFPd/0=
 
 has-symbols@^1.0.1, has-symbols@^1.0.2, has-symbols@^1.0.3:
   version "1.0.3"
@@ -6997,9 +6999,9 @@ ip-regex@^2.1.0:
   integrity sha1-+ni/XS5pE8kRzp+BnuUUa7bYROk=
 
 ip@^1.1.0, ip@^1.1.5:
-  version "1.1.8"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/ip/-/ip-1.1.8.tgz#ae05948f6b075435ed3307acce04629da8cdbf48"
-  integrity sha1-rgWUj2sHVDXtMweszgRinajNv0g=
+  version "1.1.9"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/ip/-/ip-1.1.9.tgz#8dfbcc99a754d07f425310b86a99546b1151e396"
+  integrity sha1-jfvMmadU0H9CUxC4aplUaxFR45Y=
 
 ipaddr.js@1.9.1, ipaddr.js@^1.9.0:
   version "1.9.1"
@@ -7232,9 +7234,9 @@ is-module@^1.0.0:
   integrity sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE=
 
 is-negative-zero@^2.0.2:
-  version "2.0.2"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/is-negative-zero/-/is-negative-zero-2.0.2.tgz#7bf6f03a28003b8b3965de3ac26f664d765f3150"
-  integrity sha1-e/bwOigAO4s5Zd46wm9mTXZfMVA=
+  version "2.0.3"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/is-negative-zero/-/is-negative-zero-2.0.3.tgz#ced903a027aca6381b777a5743069d7376a49747"
+  integrity sha1-ztkDoCespjgbd3pXQwadc3akl0c=
 
 is-number-object@^1.0.4:
   version "1.0.7"
@@ -8227,9 +8229,9 @@ lilconfig@^2.1.0:
   integrity sha1-eOI6yJ67fhv78lsYBD3nVlSOf1I=
 
 lilconfig@^3.0.0:
-  version "3.1.0"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/lilconfig/-/lilconfig-3.1.0.tgz#aabf03fd46934d0566d75b4b64ce41a2cdea1167"
-  integrity sha1-qr8D/UaTTQVm11tLZM5Bos3qEWc=
+  version "3.1.1"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/lilconfig/-/lilconfig-3.1.1.tgz#9d8a246fa753106cfc205fd2d77042faca56e5e3"
+  integrity sha1-nYokb6dTEGz8IF/S13BC+spW5eM=
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
@@ -9771,6 +9773,11 @@ posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
+
+possible-typed-array-names@^1.0.0:
+  version "1.0.0"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/possible-typed-array-names/-/possible-typed-array-names-1.0.0.tgz#89bb63c6fada2c3e90adc4a647beeeb39cc7bf8f"
+  integrity sha1-ibtjxvraLD6QrcSmR77us5zHv48=
 
 postcss-attribute-case-insensitive@^4.0.1:
   version "4.0.2"
@@ -12825,11 +12832,11 @@ type@^2.7.2:
   integrity sha1-I3ahWjoose+g9TUNz3LSTfbvmNA=
 
 typed-array-buffer@^1.0.1:
-  version "1.0.1"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/typed-array-buffer/-/typed-array-buffer-1.0.1.tgz#0608ffe6bca71bf15a45bff0ca2604107a1325f5"
-  integrity sha1-Bgj/5rynG/FaRb/wyiYEEHoTJfU=
+  version "1.0.2"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/typed-array-buffer/-/typed-array-buffer-1.0.2.tgz#1867c5d83b20fcb5ccf32649e5e2fc7424474ff3"
+  integrity sha1-GGfF2Dsg/LXM8yZJ5eL8dCRHT/M=
   dependencies:
-    call-bind "^1.0.6"
+    call-bind "^1.0.7"
     es-errors "^1.3.0"
     is-typed-array "^1.1.13"
 
@@ -12844,15 +12851,16 @@ typed-array-byte-length@^1.0.0:
     is-typed-array "^1.1.10"
 
 typed-array-byte-offset@^1.0.0:
-  version "1.0.0"
-  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/typed-array-byte-offset/-/typed-array-byte-offset-1.0.0.tgz#cbbe89b51fdef9cd6aaf07ad4707340abbc4ea0b"
-  integrity sha1-y76JtR/e+c1qrwetRwc0CrvE6gs=
+  version "1.0.1"
+  resolved "https://pkgs.dev.azure.com/ClaroPay/_packaging/sdk-npm-hitss-qa/npm/registry/typed-array-byte-offset/-/typed-array-byte-offset-1.0.1.tgz#5e2bcc1d93e1a332d50e8b363a48604a134692f8"
+  integrity sha1-XivMHZPhozLVDos2OkhgShNGkvg=
   dependencies:
-    available-typed-arrays "^1.0.5"
-    call-bind "^1.0.2"
+    available-typed-arrays "^1.0.6"
+    call-bind "^1.0.7"
     for-each "^0.3.3"
+    gopd "^1.0.1"
     has-proto "^1.0.1"
-    is-typed-array "^1.1.10"
+    is-typed-array "^1.1.13"
 
 typed-array-length@^1.0.4:
   version "1.0.4"

@@ -5,17 +5,34 @@ const { v4: uuidv4 } = require('uuid');
 let inst: any
 export const getClaro = async () => {
   try {
-      // Initialize Claro instance
-      const instance = await
-          sdkclaro.getInstance(
-              // Instance initialization parameters...
-          );
-      console.log(instance); // This line is within the try block
-      inst = instance;
-      return instance;
+    // Initialize Claro instance
+    const instance = await
+      sdkclaro.getInstance(
+        "Xeni",
+        () => console.log("onLaunch"),
+        () => console.log("onShow"),
+        () => console.log("onHide"),
+        () => console.log("onError"),
+        (eventName: any, eventInformation: any) => {
+          console.log(eventInformation, eventName);
+          if (eventName === "ONBACK") {
+            window.history.back();
+          }
+          if (eventName === "otp_response") {
+            console.log("otp response");
+          }
+          if (eventName === 'responseRecharge') {
+            console.log(eventInformation, "Log responseRecharge");
+          }
+        },
+        {}
+      );
+    console.log(instance); // This line is within the try block
+    inst = instance;
+    return instance;
   } catch (error) {
-      console.error("Error initializing Claro instance:", error);
-      throw error;
+    console.error("Error initializing Claro instance:", error);
+    throw error;
   }
 }
 
@@ -26,55 +43,58 @@ console.log(inst);
 
 
 // Function to initialize payment transaction
-export const initializePayment = async (cardNumber: string, idCom: string, idGrp: string, checkDigit: number, amount: string, appId: string, setRes: any
-    , category: string, claroUserId: string, description: string, logo: string, merchantId: string, reference: string,
-)=>{
-      console.log("inst.transactionPayment")
-      const data = {
-        cardNumber: cardNumber,
-        idCom: idCom,
-        idGrp: idGrp,
-        checkDigit: checkDigit,
-        amount: amount,
-        appId: appId
-      };
-  
-      const key = uuidv4();
-      // @ts-ignore
-      const top = inst.setState(key, data,
-        (result: any) => {
-          console.log(result);
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
-  
-      const payload = {
-        amount: amount,
-        category: category,
-        claroUserId: claroUserId,
-        concept: "",
-        description: description,
-        feeAmount: 0,
-        logo: logo,
-        merchantId: merchantId,
-        operationId: "a1",
-        payProcessor: { id: 1, name: 'N2', showCVV: false },
-        refNumber: "",
-        reference: reference,
-        totalCommission: 0
-      };
-      if (top) {
-      const resp = inst.transactionPayment(
-        payload,
-        (result: any) => {
-          console.log(result);
-        },
-        (error: any) => {
-          console.log(error);
-        }
-      );
-      setRes(resp);
-      }
+export const initializePayment = async (dataPayload: any, setRes: any) => {
+  const key = uuidv4();
+  const data = {
+    cardNumber: dataPayload.cardNumber,
+    idCom: dataPayload.idCom,
+    idGrp: dataPayload.idGrp,
+    checkDigit: dataPayload.checkDigit,
+    amount: dataPayload.amount,
+    appId: dataPayload.appId
+  };
+  const dat = JSON.stringify(data);
+  console.log(dat);
+
+  // Set state for payment
+  console.log(inst.setState());
+  const top = await inst.setState(
+    key,
+    data,
+    (result: any) => {
+      console.log(result);
+    },
+    (error: any) => {
+      console.log(error);
+    }
+  );
+  console.log(top)
+  // Define payload for transaction
+  const payload = {
+    amount: dataPayload.amount,
+    category: dataPayload.category,
+    claroUserId: dataPayload.claroUserId,
+    concept: "",
+    description: dataPayload.description,
+    feeAmount: 0,
+    logo: dataPayload.logo,
+    merchantId: dataPayload.merchantId,
+    operationId: key,
+    payProcessor: { id: 1, name: 'N2', showCVV: false },
+    refNumber: "",
+    reference: dataPayload.reference,
+    totalCommission: 0
+  };
+
+  // Execute the transaction
+  const resp: any = await inst.transactionPayment(
+    payload,
+    (result: any) => {
+      console.log(result);
+    },
+    (error: any) => {
+      console.log(error);
+    }
+  );
+  setRes(resp);
 }
