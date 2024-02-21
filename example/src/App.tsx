@@ -15,7 +15,7 @@ const App = () => {
     "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZSI6ImF1dGhvcmlzYXRpb24gc2RrIiwibWVyY2hhbnRSZWZlcmVuY2UiOiI5MzNmMDg0Ny0xOWFjLTQ2ZjItOTIzOS0wZGJlMWEwNjU0NDkiLCJleHAiOjE3MzUxMDMyNTYsImlzcyI6ImFwaS10b2tlbi1zZXJ2aWNlIn0.NfDUdvhYlJeu4_yxCtudk-bg3kwEdVwvjZ_e2_aYk3E11orVGd8bl6RC5K-dxhKIRss4M6RwYGBlSDuL-_sFbPXOePOvwSDZmQs6KExv-XjK2-OkYDeEuLpQZSwIwQ3a6wXezG0Wat4Y7XQAmPXjdpnmSL-EV2yG_f2V8keqYaJI_bnvIxu3bBUyDfIcIWyYCX03kZGb8151giVbAEdKc5zN3lyAGlMRl8OyBXd1efoDLEA30JlSIf67YG9iUnKLYvW8DaYNV3za9X-egJ2M7fjCqNmUDdy7UT7_29Wdwa3Dc1Wqzlu6k422FRc6FwgydL7vlL9pkN3skfVhtAupERErliu2l8uJd_8qCMv349gy9XSoRj7hBpkCkMgZnmYvlgkV__aZsTdVE64yQiPM9Fd_O0enKvo1OA7HNKuZlpa2Qe5p7olmlQs3gH-4nPDIbRFH1PrVEqda915tfPJAsL05rCPvuA76xW-0YzpcDCI6PVnKwd1w1tPYeJ-zjpIlBFtTqX3nmdPr7uIrWqCbRL-EyhRbchgxjU00o1uRMg2I-0rNmH_KpPf5poZX10JxC6VkjqDb5sjtM6BNub1mmSX5YFr4yzedNiuLMJOO8QI2VKu0z_FCoFdyXXqeNe6zA_wvrbP12zOATShfgnLC8LRYUebmTjCdde0RkX4Q2GA"
   configureSdk(key, "stg");
 
-  const { getInfo, Widget, authorizeCard, getClaro } = useSdk();
+  const { getInfo, Widget, authorizeCard, initializePayment } = useSdk();
   const [, setRecievedObj] = useState<any>()
   const [, setFlag] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -109,7 +109,47 @@ const App = () => {
 
   // const merchantId= 519149;
   // console.log("attemptRef", attemptRef);
-  
+
+  const cardNumber = "IMDM24594221";
+  const idCom = "0074";
+  const idGrp = "0002";
+  const checkDigit = 1;
+  const amount = "200";
+  const appId = "Xeni";
+  const category = "MA";
+  const claroUserId = "9e04539e-e05d-452a-987a-0fd88df6ec56";
+  const description = "IMDM24594221";
+  const logo = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALU";
+  const merchantId = "0000000089d784fd018af1e652f40008";
+  const reference = "IMDM24594221";
+  const dataPayload={
+    cardNumber,
+          idCom,
+          idGrp,
+          checkDigit,
+          amount,
+          appId,
+          category,
+          claroUserId,
+          description,
+          logo,
+          merchantId,
+          reference,
+  }
+
+  const initatePayment = async() => {
+    
+      try {
+        const result = await initializePayment(dataPayload, setRes);
+        console.log(result)
+
+        setRes(result);
+      }
+      catch (error) {
+        console.error("error in intializing payment:", error)
+      }
+    }
+
   useEffect(() => {
 
     setValues();
@@ -196,7 +236,8 @@ const App = () => {
     </div>
     <div>
       {/* @ts-ignore */}
-      <button onClick={()=>getClaro()}>claro</button>
+      {/* <button onClick={async()=>setInstance(await getClaro())}>claro</button> */}
+      <button onClick={initatePayment}>claropay</button>
     </div>
     </div>
   );
