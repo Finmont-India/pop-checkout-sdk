@@ -60,7 +60,7 @@ export const initializePayment = async (dataPayload: any, setRes: any) => {
   console.log(inst.setState());
   const top = await inst.setState(
     key,
-    data,
+    dat,
     (result: any) => {
       console.log(result);
     },
