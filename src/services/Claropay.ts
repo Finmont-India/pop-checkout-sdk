@@ -3,6 +3,7 @@ import sdkclaro from '@claro/sdkclaro'
 const { v4: uuidv4 } = require('uuid');
 
 let inst: any
+let bootInfo: any;
 export const getClaro = async () => {
   try {
     // Initialize Claro instance
@@ -15,14 +16,18 @@ export const getClaro = async () => {
         () => console.log("onError"),
         (eventName: any, eventInformation: any) => {
           console.log(eventInformation, eventName);
-          if (eventName === "ONBACK") {
+          /* if (eventName === "ONBACK") {
             window.history.back();
-          }
+          } 
           if (eventName === "otp_response") {
             console.log("otp response");
-          }
+          } */
           if (eventName === 'responseRecharge') {
             console.log(eventInformation, "Log responseRecharge");
+          }
+          if (eventName === 'sendBootInformation') {
+            bootInfo=eventInformation
+            console.log(eventInformation, "Send Boot Information");
           }
         },
         {}
@@ -40,7 +45,7 @@ export const getClaro = async () => {
 console.log(inst);
 
 
-
+console.log(bootInfo)
 
 // Function to initialize payment transaction
 export const initializePayment = async (dataPayload: any, setRes: any) => {
@@ -56,8 +61,6 @@ export const initializePayment = async (dataPayload: any, setRes: any) => {
   const dat = JSON.stringify(data);
   console.log(dat);
 
-  // Set state for payment
-  console.log(inst.setState());
   const top = await inst.setState(
     key,
     dat,
