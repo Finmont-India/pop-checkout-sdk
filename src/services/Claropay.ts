@@ -56,7 +56,7 @@ export const initializePayment = async (dataPayload: any, setRes: any) => {
     idGrp: dataPayload.idGrp,
     checkDigit: dataPayload.checkDigit,
     amount: dataPayload.amount,
-    appId: dataPayload.appId
+    appId: bootInfo.profileInformation.isOpen
   };
   const dat = JSON.stringify(data);
   console.log(dat);
