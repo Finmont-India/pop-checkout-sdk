@@ -6,27 +6,32 @@
   
 .customModal {
     width: 50%;
-    height: 70%;
+    height: 42%;
     max-height: 80%; /* Fix the maximum height to 80% of the viewport height */
     overflow-y: hidden; /* Add vertical scroll if content exceeds the height */
     overflow-x: hidden;
     z-index:9999;
+    border-radius: 10px;
+  }
+
+  @media (max-width: 1025px) {
+    .customModal {
+      width: 50%;
+      height: 53%;
+    }
   }
   /* Responsive styles for screens with a max-width of 768px */
 @media (max-width: 768px) {
     .customModal {
       width: 60%;
-      height: 60%;
+      height: 70%;
     }
   }
   
   /* Responsive styles for screens with a max-width of 480px */
   @media (max-width: 480px) {
     .customModal {
-      width: 80%;
-      height: 80%;
-      left: 0;
-      top: 0;
+      height: 70%;
     }
   }
 

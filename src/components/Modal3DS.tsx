@@ -13,9 +13,7 @@ const Modal3DS: React.FC<{
   url: string;
   setRes: any;
 }> = ({ isOpen, isAuth, onClose, url, setRes, onAuthClose }) => {
-  console.log(onAuthClose)
   const isMounted = useRef<boolean>(true);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const [flag, setFlag] = useState<boolean>(isAuth);
   const [iframeUrl, setIframeUrl] = useState(url);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -94,7 +92,7 @@ const Modal3DS: React.FC<{
   useEffect(() => {
     const handleMessage = (event: any) => {
       // Check if the message is from the iframe and if data is a URL
-      if (event.source === iframeRef.current?.contentWindow && typeof event.data === 'string') {
+      if (typeof event.data === 'string' && event.data.includes('/sdkresult')) {
         // Handle the URL received from the iframe
         setIframeUrl('');
         checkIframeUrl(event.data);
@@ -105,7 +103,7 @@ const Modal3DS: React.FC<{
     return () => {
       window.removeEventListener('message', handleMessage);
     };
-  }, [iframeRef, ref, recRef]);
+  }, [ ref, recRef]);
 
   useEffect(() => {
     setIsLoading(true); // Set loading to true when the iframe URL changes
@@ -131,7 +129,6 @@ const Modal3DS: React.FC<{
           }}>
             <iframe
               title="Form"
-              ref={iframeRef}
               src={iframeUrl}
               id="myIframe"
               style={{
@@ -170,7 +167,6 @@ const Modal3DS: React.FC<{
                 ) : (
                   <iframe
                     title="Form"
-                    ref={iframeRef}
                     src={iframeUrl}
                     id="myIframe"
                     style={{

@@ -19,7 +19,7 @@ export const getCardType = (cardNumber: string) => {
     },
     {
       type: 'Diners Club',
-      pattern: /^3(?:0[0-5]|[68][0-9])/,
+      pattern: /^3(?:0[0-5]|[68]\d)\d{11}$/,
     },
     {
       type: 'BCcard and DinaCard',
@@ -43,6 +43,8 @@ export const getCardType = (cardNumber: string) => {
   // Check card type based on the card number pattern
   for (const cardType of cardTypes) {
     if (cardType.pattern.test(cardNumber)) {
+      console.log(`Card number: ${cardNumber}, Matched pattern for ${cardType.type}: ${cardType.pattern}`);
+
       return cardType.type;
     }
   }
